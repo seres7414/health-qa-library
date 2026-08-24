@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>健康美丽学习社 Q&A 库 v1 · 35+女性八大模块</title>
+<title>健康美丽学习社 Q&A 库 v1 · 35+女性六大模块</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
@@ -95,7 +95,7 @@
   .cat-title .tag{font-size:11.5px; color:#fff; padding:1px 9px; border-radius:999px; font-weight:400; letter-spacing:.02em;}
 
   .qa{border-top:1px dashed var(--line);}
-  .qa:first-child{border-top:none;}
+  .cat > .qa:first-of-type{border-top:none;}
   .q{
     display:flex; align-items:center; gap:10px; width:100%; text-align:left; cursor:pointer;
     padding:13px 4px; background:none; border:none; font-family:inherit; color:var(--ink);
@@ -176,7 +176,7 @@
   <header class="hero">
     <p class="eyebrow">HEALTH &amp; BEAUTY · 学习社</p>
     <h1>健康美丽学习社 Q&amp;A 库 v1</h1>
-    <p class="sub">35+ 女性 · 用健康生活方式改善八大模块问题</p>
+    <p class="sub">35+ 女性 · 用健康生活方式改善六大模块问题</p>
     <div class="hero-note">本库为健康生活方式科普，不提供医疗诊断与治疗建议；涉及就医的情形已明确标注「建议就医」。</div>
   </header>
 
@@ -343,14 +343,6 @@
               <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>尝试大部分方法仍难入睡或睡眠质量差，可到「睡眠门诊」或精神心理科，医生会给出专业方案。</span></div>
               <div class="src"><span>腾讯医典</span>来源：《改善睡眠的小技巧》</div>
             </div></div></div>
-          </div>
-        </div>
-
-        <div class="cat">
-          <div class="cat-title"><span class="dot" style="background:var(--rose)"></span><span class="tag" style="background:var(--rose)">生理期小贴士</span></div>
-          <div class="qa">
-            <button class="q"><span class="qmark">Q</span><span class="qtext">经期前后为什么更容易睡不好？怎么改善？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
-            <div class="a"><div class="ainner"><div class="a-body">经期前后激素波动会影响体温、情绪和痛感，部分人会入睡困难、多梦。可：白天适度运动、多晒太阳；睡前少咖啡因、少屏幕；用热水袋暖腹缓解不适；保持卧室黑暗安静。若痛经严重影响睡眠，请看妇科。</div></div></div>
           </div>
         </div>
 
@@ -540,14 +532,6 @@
               <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>若紧张、担心、身体不适感持续且明显影响生活，请到精神心理科/心身医学科评估。</span></div>
               <div class="src"><span>腾讯医典</span>来源：《改善睡眠的小技巧》《为何女性更易焦虑？》</div>
             </div></div></div>
-          </div>
-        </div>
-
-        <div class="cat">
-          <div class="cat-title"><span class="dot" style="background:var(--rose)"></span><span class="tag" style="background:var(--rose)">生理期小贴士</span></div>
-          <div class="qa">
-            <button class="q"><span class="qmark">Q</span><span class="qtext">经前期为什么容易情绪低落、易怒？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
-            <div class="a"><div class="ainner"><div class="a-body">经前期紧张综合征常出现在月经前 1–2 周，表现为烦躁、情绪不稳、焦虑，还可能伴水肿、胀痛。这是激素波动带来的正常反应，可通过规律运动、睡眠、减少刺激、与家人沟通来舒缓；若严重到影响生活，可就医。</div></div></div>
           </div>
         </div>
 
@@ -767,13 +751,81 @@
         <div class="module-sources"><b>模块参考资料：</b>腾讯医典《女人35岁以后如何保养更年轻》《健身前后怎样饮食才健康》；ima知识库·减重知识库（《成人肥胖食养指南2024》）。</div>
       </div></div></div></section>
 
+    <!-- 模块9 生理期小贴士 -->
+    <section class="module" data-accent="rose">
+      <button class="module-header" aria-expanded="false">
+        <span class="num" style="background:linear-gradient(135deg,#d9b8b0,#c79a90)">9</span>
+        <span class="m-title"><h2>生理期小贴士</h2><p>经期前后饮食·运动·睡眠·情绪全照护</p></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="collapsible"><div class="inner"><div class="body-pad">
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--rose)"></span><span class="tag" style="background:var(--rose)">饮食</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">经期前后怎么吃更舒服？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">经期前后可多补<b>温性食物与造血营养素</b>：瘦肉、动物肝脏、红肉、深绿蔬菜补铁；温热的粥汤、红糖姜茶暖身；适量坚果、全谷物稳定血糖。少碰生冷、辛辣、高盐与过量咖啡因——后者会加剧胀痛与焦虑。参考「地中海式 + 东方膳食」思路，均衡就好，不必大补。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">经期能喝咖啡、奶茶吗？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">可以少量，但不宜多。咖啡因会收缩血管、刺激神经，可能加重痛经、乳房胀痛和焦虑不安。若经期本就头痛、失眠或情绪不稳，建议这几天改喝温水、花草茶或温牛奶更稳妥。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">经期水肿、想暴食甜食正常吗？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">经前雌激素波动会让人潴留水分、渴望高糖高盐，是激素带来的正常反应。应对：适度满足（一小块黑巧即可），同时多吃富含镁的食物（深绿菜、坚果、香蕉）帮助舒缓情绪与胀痛，别因暴食自责。</div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--sage)"></span><span class="tag" style="background:var(--sage)">运动</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">经期能不能运动？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">经期不是运动的禁区。若身体无明显不适，<b>温和运动反而有助缓解痛经与情绪低落</b>——散步、瑜伽、拉伸、轻度有氧都可。但应避开高强度间歇、大重量力量训练和让腹部受压的动作；经量大的前几天更要减量。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">经期适合做哪些舒缓运动？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">首推三类：① <b>散步/慢走</b>——促进内啡肽、放松情绪；② <b>瑜伽拉伸</b>——猫牛式、婴儿式舒缓腰腹；③ <b>八段锦/太极</b>——调息安神。这些都属于「身心运动」，与运动库里的放松类动作一致，经期练正合适。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">经期运动有哪些禁忌？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">相对避免：倒立、剧烈跳跃、长时间卷腹、大重量硬拉等对盆腹压迫大的动作；游泳选卫生条件好、经量少的时段，避免感染。若运动中头晕、剧痛或经量骤增，立即停下休息。运动库中的「硬拉/跳绳/爬楼」等高冲击项建议经期缓一缓。</div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--blue)"></span><span class="tag" style="background:var(--blue)">睡眠</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">经期前后为什么更容易睡不好？怎么改善？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">经期前后激素波动会影响体温、情绪和痛感，部分人会入睡困难、多梦。可：白天适度运动、多晒太阳；睡前少咖啡因、少屏幕；用热水袋暖腹缓解不适；保持卧室黑暗安静。若痛经严重影响睡眠，请看妇科。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">痛经影响睡眠怎么办？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">先保暖与放松：热水袋敷小腹、温水泡脚、侧卧抱枕减轻骨盆压力；睡前做腹式呼吸或渐进式肌肉放松。轻度不适多能缓解；若每次都剧痛、需服止痛药或影响白天生活，应就医排查子宫内膜异位症、腺肌症等。</div><div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>痛经严重、经量异常增多或周期紊乱，请到妇科就诊评估。</span></div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--lav)"></span><span class="tag" style="background:var(--lav)">情绪</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">经前期为什么容易情绪低落、易怒？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">经前期紧张综合征常出现在月经前 1–2 周，表现为烦躁、情绪不稳、焦虑，还可能伴水肿、胀痛。这是激素波动带来的正常反应，可通过规律运动、睡眠、减少刺激、与家人沟通来舒缓；若严重到影响生活，可就医。</div><div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>若经前情绪严重低落、有自伤念头或完全无法正常工作生活，请到精神心理科 / 妇科评估（经前烦躁障碍 PMDD）。</span></div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">经期情绪起伏大，怎么自己调节？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">把「情绪日记」用起来——记录周期与心情，提前预知波动、减少自我苛责；用 4-7-8 呼吸、正念步行等放松技巧（见情绪管理模块）；把重要决策、易冲突的谈话尽量避开经前高峰。接纳波动，比硬扛更轻松。</div></div></div>
+          </div>
+        </div>
+
+        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《女性经期保健》《经前期综合征》《痛经》《为何女性更易焦虑？》；ima知识库·营养百科（经期铁与镁补充、地中海/东方膳食模式）。</div>
+      </div></div></div></section>
+
   </div>
 
   <div class="no-result" id="noResult">没有找到匹配的问题，换个关键词试试～</div>
 
   <footer>
     <h3>关于本 Q&amp;A 库</h3>
-    <p>本库面向 35+ 女性，聚焦「健康生活方式」改善八大模块问题，内容参考 <b>腾讯医典</b> 官方科普与 <b>ima 知识库</b>（营养百科、减重知识库等），以通俗语言整理，便于日常理解与实践。</p>
+    <p>本库面向 35+ 女性，聚焦「健康生活方式」改善六大模块问题，内容参考 <b>腾讯医典</b> 官方科普与 <b>ima 知识库</b>（营养百科、减重知识库等），以通俗语言整理，便于日常理解与实践。</p>
     <div class="disclaimer">
       <b>免责声明：</b>本库仅作健康科普与生活方式参考，<b>不构成任何医疗诊断、治疗建议或替代专业诊疗</b>。每个人的身体状况不同，出现不适应及时前往正规医疗机构就诊；涉及用药、激素治疗、医美、长期失眠/情绪问题等，请遵循医生或专业人士指导。文中标注「建议就医」的情形，均请优先咨询专业医生。
     </div>
