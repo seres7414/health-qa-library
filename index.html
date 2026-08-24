@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>健康美丽学习社 Q&A 库 v1 · 35+女性八大模块</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sage:#8AA39B; --rose:#C9A9A6; --blue:#9DAAB8; --peach:#D8B4A0; --olive:#A8A88A; --lav:#ADA4BC;
+    --ink:#4a4540; --ink-soft:#6f6862; --line:rgba(120,110,100,.16);
+    --glass:rgba(255,253,250,.62); --glass-strong:rgba(255,253,250,.82);
+    --shadow:0 10px 30px -12px rgba(90,80,70,.30);
+    --radius:22px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0;}
+  body{
+    font-family:"Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    color:var(--ink); line-height:1.75; font-weight:300;
+    background:
+      radial-gradient(1200px 700px at 12% -8%, rgba(138,163,155,.30), transparent 60%),
+      radial-gradient(900px 600px at 92% 6%, rgba(201,169,166,.28), transparent 60%),
+      radial-gradient(1000px 800px at 50% 110%, rgba(173,164,188,.22), transparent 60%),
+      linear-gradient(160deg,#f7f3ee 0%, #f1ece6 45%, #eef0ea 100%);
+    background-attachment:fixed;
+    min-height:100vh;
+  }
+  /* watercolor blob decoration */
+  .blob{position:fixed; border-radius:50%; filter:blur(40px); opacity:.5; z-index:0; pointer-events:none;}
+  .blob.b1{width:340px;height:340px;left:-90px;top:120px;background:radial-gradient(circle at 30% 30%, var(--sage), transparent 70%);}
+  .blob.b2{width:300px;height:300px;right:-70px;top:40%;background:radial-gradient(circle at 40% 40%, var(--rose), transparent 70%);}
+  .blob.b3{width:260px;height:260px;left:20%;bottom:-60px;background:radial-gradient(circle at 50% 50%, var(--lav), transparent 70%);}
+
+  .wrap{position:relative; z-index:1; max-width:880px; margin:0 auto; padding:26px 18px 80px;}
+
+  header.hero{
+    background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:30px 26px; text-align:center; margin-bottom:18px;
+  }
+  .eyebrow{font-size:13px; letter-spacing:.32em; color:var(--rose); font-weight:500; margin:0 0 8px;}
+  h1{font-family:"Noto Serif SC",serif; font-weight:700; font-size:30px; margin:0 0 6px; color:var(--ink); letter-spacing:.04em;}
+  .sub{font-size:14.5px; color:var(--ink-soft); margin:6px 0 0;}
+  .hero-note{
+    margin-top:18px; font-size:13px; color:var(--ink-soft);
+    background:rgba(205,169,166,.16); border:1px solid rgba(201,169,166,.35);
+    border-radius:14px; padding:10px 14px; display:inline-block;
+  }
+
+  .search{
+    position:relative; margin:18px 0 22px;
+  }
+  .search input{
+    width:100%; border:1px solid var(--line); border-radius:16px; padding:14px 18px 14px 46px;
+    font-size:15px; font-family:inherit; color:var(--ink); background:var(--glass-strong);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); outline:none; box-shadow:var(--shadow);
+  }
+  .search input::placeholder{color:#a59e96;}
+  .search svg{position:absolute; left:16px; top:50%; transform:translateY(-50%); width:20px; height:20px; stroke:var(--rose);}
+
+  .module{
+    background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);
+    margin-bottom:16px; overflow:hidden; transition:border-color .3s;
+  }
+  .module-header{
+    display:flex; align-items:center; gap:14px; width:100%; text-align:left; cursor:pointer;
+    padding:20px 22px; background:none; border:none; font-family:inherit; color:var(--ink);
+  }
+  .num{
+    flex:0 0 auto; width:42px; height:42px; border-radius:14px; display:grid; place-items:center;
+    font-family:"Noto Serif SC",serif; font-weight:700; font-size:18px; color:#fff;
+    box-shadow:0 6px 16px -6px rgba(90,80,70,.5);
+  }
+  .m-title{flex:1;}
+  .m-title h2{font-family:"Noto Serif SC",serif; font-weight:600; font-size:20px; margin:0; letter-spacing:.03em;}
+  .m-title p{margin:3px 0 0; font-size:12.5px; color:var(--ink-soft); font-weight:300;}
+  .chev{flex:0 0 auto; width:26px; height:26px; transition:transform .35s ease; color:var(--ink-soft);}
+  .module.open .chev{transform:rotate(180deg);}
+
+  .collapsible{display:grid; grid-template-rows:0fr; transition:grid-template-rows .4s ease;}
+  .module.open .collapsible{grid-template-rows:1fr;}
+  .collapsible > .inner{overflow:hidden;}
+  .body-pad{padding:4px 22px 24px;}
+
+  .cat{margin-top:14px;}
+  .cat-title{
+    display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:var(--ink);
+    letter-spacing:.04em; margin:0 0 6px;
+  }
+  .cat-title .dot{width:8px;height:8px;border-radius:50%;}
+  .cat-title .tag{font-size:11.5px; color:#fff; padding:1px 9px; border-radius:999px; font-weight:400; letter-spacing:.02em;}
+
+  .qa{border-top:1px dashed var(--line);}
+  .qa:first-child{border-top:none;}
+  .q{
+    display:flex; align-items:center; gap:10px; width:100%; text-align:left; cursor:pointer;
+    padding:13px 4px; background:none; border:none; font-family:inherit; color:var(--ink);
+    font-size:15px; font-weight:400; line-height:1.5;
+  }
+  .q .qmark{
+    flex:0 0 auto; width:22px;height:22px;border-radius:50%; background:rgba(138,163,155,.22);
+    color:var(--sage); font-weight:700; font-size:13px; display:grid; place-items:center; font-family:"Noto Serif SC",serif;
+  }
+  .q .qtext{flex:1;}
+  .q .qc{width:18px;height:18px; color:var(--ink-soft); transition:transform .3s; flex:0 0 auto;}
+  .q.open .qc{transform:rotate(45deg);}
+
+  .a{display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s ease;}
+  .q.open + .a{grid-template-rows:1fr;}
+  .a > .ainner{overflow:hidden;}
+  .a-body{padding:2px 4px 14px 36px; font-size:14px; color:var(--ink-soft); font-weight:300;}
+  .a-body b{color:var(--ink); font-weight:500;}
+
+  .see-doctor{
+    margin-top:10px; padding:9px 13px; border-radius:12px; font-size:13px; font-weight:400;
+    background:rgba(201,169,166,.16); border:1px solid rgba(201,169,166,.4); color:#9c5f59;
+    display:flex; gap:8px; align-items:flex-start;
+  }
+  .see-doctor b{color:#8a4f49; font-weight:600;}
+  .src{margin-top:10px; font-size:11.5px; color:#a59e96; font-weight:300;}
+  .src span{display:inline-block; margin-right:4px; padding:1px 8px; border:1px solid var(--line); border-radius:999px;}
+
+  .module-sources{
+    margin-top:16px; padding:12px 14px; border-radius:14px; background:rgba(255,255,255,.4);
+    border:1px solid var(--line); font-size:12px; color:var(--ink-soft);
+  }
+  .module-sources b{color:var(--ink); font-weight:500;}
+
+  footer{
+    margin-top:30px; background:var(--glass); backdrop-filter:blur(14px); border:1px solid var(--line);
+    border-radius:var(--radius); box-shadow:var(--shadow); padding:22px 24px; font-size:12.5px; color:var(--ink-soft);
+  }
+  footer h3{font-family:"Noto Serif SC",serif; font-size:15px; color:var(--ink); margin:0 0 8px; font-weight:600;}
+  footer p{margin:6px 0; font-weight:300;}
+  .disclaimer{margin-top:12px; padding:12px 14px; border-radius:12px; background:rgba(157,170,184,.16); border:1px solid rgba(157,170,184,.35);}
+
+  .no-result{padding:30px; text-align:center; color:var(--ink-soft); display:none;}
+
+  /* 大全/库 模块专用条目 */
+  .lib-note{
+    margin:2px 0 6px; padding:11px 14px; border-radius:13px; font-size:12.5px; font-weight:300;
+    background:rgba(168,168,138,.16); border:1px solid rgba(168,168,138,.36); color:var(--ink-soft); line-height:1.7;
+  }
+  .lib-note b{color:var(--ink); font-weight:600;}
+  .lib-item{
+    display:flex; gap:12px; padding:11px 4px; border-top:1px dashed var(--line); align-items:flex-start;
+  }
+  .lib-item:first-child{border-top:none;}
+  .lib-name{
+    flex:0 0 auto; min-width:96px; max-width:40%; font-weight:500; color:var(--ink);
+    font-size:14.5px; font-family:"Noto Serif SC",serif; line-height:1.5;
+  }
+  .lib-desc{flex:1; font-size:13.5px; color:var(--ink-soft); font-weight:300; line-height:1.65;}
+  .lib-desc b{color:var(--ink); font-weight:500;}
+  .cat-img{display:block; width:100%; height:auto; border-radius:16px; margin:10px 0 6px; border:1px solid var(--line); box-shadow:0 6px 18px -10px rgba(90,80,70,.35); max-height:240px; object-fit:cover;}
+
+  @media (max-width:560px){
+    h1{font-size:25px;}
+    .m-title h2{font-size:18px;}
+    .wrap{padding:18px 12px 70px;}
+    .a-body{padding-left:30px;}
+    .lib-name{min-width:76px; font-size:13.5px; max-width:44%;}
+    .lib-desc{font-size:13px;}
+    .cat-img{max-height:170px;}
+  }
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">HEALTH &amp; BEAUTY · 学习社</p>
+    <h1>健康美丽学习社 Q&amp;A 库 v1</h1>
+    <p class="sub">35+ 女性 · 用健康生活方式改善八大模块问题</p>
+    <div class="hero-note">本库为健康生活方式科普，不提供医疗诊断与治疗建议；涉及就医的情形已明确标注「建议就医」。</div>
+  </header>
+
+  <div class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input id="search" type="text" placeholder="搜索你关心的问题，例如：潮热、失眠、胶原蛋白、力量训练…" />
+  </div>
+
+  <div id="modules">
+
+    <!-- 模块1 抗衰老 -->
+    <section class="module" data-accent="sage">
+      <button class="module-header" aria-expanded="false">
+        <span class="num" style="background:linear-gradient(135deg,#9bb3aa,#7e9a90)">1</span>
+        <span class="m-title"><h2>抗衰老</h2><p>延缓氧化与糖化，留住年轻状态</p></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="collapsible"><div class="inner"><div class="body-pad">
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--sage)"></span><span class="tag" style="background:var(--sage)">推荐运动类型</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">35+ 女性适合哪些运动来抗老？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">
+              建议把三类运动搭配起来：<b>有氧运动</b>（快走、游泳、骑车）改善心肺与代谢；<b>力量训练</b>（哑铃、弹力带、自重训练）维持肌肉与骨量，延缓「垮」；<b>柔韧舒缓</b>（瑜伽、太极、拉伸）缓解僵硬、放松神经。每周 3–5 次、每次 30 分钟以上，比偶尔猛练更见效。
+              <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>若运动中出现胸闷、头晕、关节剧痛，或本身有心血管/骨关节基础病，请先咨询医生再制定运动处方。</span></div>
+              <div class="src"><span>腾讯医典</span><span>ima知识库·营养百科</span>来源：《女人35岁以后如何保养更年轻》</div>
+            </div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--olive)"></span><span class="tag" style="background:var(--olive)">地中海食材清单</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">哪些食物抗氧化、帮着延缓衰老？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">
+              多亲近「地中海式」食材：<b>深绿色蔬菜</b>（菠菜、西兰花）、<b>彩色果蔬</b>（番茄、蓝莓、柑橘）、<b>全谷物</b>（燕麦、糙米）、<b>坚果种子</b>（核桃、芝麻、开心果，补维生素E）、<b>深海鱼</b>（三文鱼、沙丁鱼，含 Omega-3）、<b>豆制品</b>与无糖酸奶。这类饮食被营养学界视为健康膳食模式，能减少体内氧化与炎症。<br>尽量少吃：油炸、烧烤、腌制、过度加工食品，以及奶茶蛋糕等高糖高 GI 食物——它们会加速「糖化」，让皮肤发黄、长纹。
+              <div class="src"><span>腾讯医典</span><span>ima知识库·营养百科</span>来源：《抗衰老的食物有哪些》《想要老得慢？做好这4件事》</div>
+            </div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--rose)"></span><span class="tag" style="background:var(--rose)">其他高频问题</span></div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">为什么一过 35 岁，皮肤就明显「垮」了？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">25 岁后皮肤胶原蛋白逐年下降；到 40 岁左右，胶原蛋白可能不足 18 岁时的一半，于是出现静态纹、松弛、凹陷。加上代谢变慢、熬夜与光老化累积，确会「显老」。好消息是：防晒、饮食、作息能明显延缓这个过程。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">防晒真的能抗衰老吗？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">能，而且是性价比最高的抗老手段之一。紫外线（UVA/UVB）会破坏胶原蛋白和弹性纤维，造成色斑、松弛、红血丝——这就是「光老化」。日常用 SPF30 防晒霜就够；长时间户外用 SPF50 并配合帽子/伞，每 2 小时补涂。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">吃猪蹄、胶原蛋白补剂能补回流失的胶原吗？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">吃进去的胶原蛋白会先被消化成氨基酸，并不会「直接长」到脸上。更靠谱的做法是：<b>补足优质蛋白</b>（鱼、蛋、豆制品）提供合成原料，同时吃<b>富含维生素 C</b> 的果蔬促进胶原合成，再配合防晒、少糖、少熬夜，从源头减少流失。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">高糖饮食和长皱纹有什么关系？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">糖分进入体内会发生「糖化反应」，生成糖化终产物（AGEs），它会让胶原蛋白变脆、皮肤发黄松弛、长皱纹。奶茶、甜点、含糖饮料是重灾区。控糖不是不吃碳水，而是少添加糖、选低 GI 主食。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">熬夜会加速衰老吗？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">会。长期熬夜打乱激素、减慢皮肤代谢，黑眼圈、眼袋、暗沉、爆痘都随之而来，自由基也更易堆积。尽量规律作息、睡足 7 小时左右，给身体自我修复的时间。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">抗老护肤品该看哪些成分？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">对抗「氧化、糖化、光损伤」三剑客，可关注：<b>维生素 C/E、烟酰胺、视黄醇（A醇）、多肽、玻色因</b>等。注意：A醇需建立耐受、孕期哺乳期慎用；敏感肌先局部试用。护肤品是辅助，防晒和生活方式才是地基。</div></div></div>
+          </div>
+        </div>
+
+        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《从25岁到50岁，女人怎么抗衰老？》《女人35岁以后如何保养更年轻》《抗衰老的食物有哪些》《吃进去的胶原蛋白真的能美容吗？》；ima知识库·营养百科（《中国营养科学全书》《中国居民膳食指南2022》）。</div>
+      </div></div></div></section>
+
+    <!-- 模块2 稳度更年 -->
+    <section class="module" data-accent="rose">
+      <button class="module-header" aria-expanded="false">
+        <span class="num" style="background:linear-gradient(135deg,#d6b3af,#bd8f8b)">2</span>
+        <span class="m-title"><h2>稳度更年</h2><p>平稳度过激素波动的特殊时期</p></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="collapsible"><div class="inner"><div class="body-pad">
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--rose)"></span><span class="tag" style="background:var(--rose)">放松技巧</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">突然潮热出汗，有什么立刻能用的放松法？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">
+              轻度潮热靠「行为干预」就能缓解：调低室温/开风扇、穿衣分层方便穿脱、避开热饮热茶、脖子处放冷毛巾；<b>规律运动</b>也能降低发作频率。若这些方法都不管用、已影响日常，可在医生评估后考虑激素或非激素药物。
+              <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>潮热严重、伴异常阴道出血、情绪或睡眠明显崩溃，请到妇科/更年期门诊就诊，不要自行买药。</span></div>
+              <div class="src"><span>腾讯医典</span>来源：《潮热症状让更年期的你心烦？几招教你缓解》</div>
+            </div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--olive)"></span><span class="tag" style="background:var(--olive)">地中海食材清单</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">更年期饮食上怎么吃更舒服、更养骨？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">
+              重点三件事：① <b>补钙+维 D</b>——奶类、豆制品、小鱼小虾、深绿色蔬菜，多晒太阳；② <b>足量优质蛋白</b>——瘦肉、鱼虾、蛋、豆制品，减缓肌肉流失；③ 多吃蔬果、全谷物，少油腻辛辣、高糖。偏胖者可适度减重，反而能缓解不适。
+              <div class="src"><span>腾讯医典</span>来源：《更年期出汗多怎么办》《更年期潮热出汗，可以吃什么调理》</div>
+            </div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--blue)"></span><span class="tag" style="background:var(--blue)">其他高频问题</span></div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">怎么判断自己是不是进入更年期了？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">更年期多发生在 45–55 岁，是必经的生理过程。常见信号：月经开始乱（周期、经量变化）、潮热盗汗、心慌、失眠、情绪波动、关节酸等。多数人能自我调节平稳度过，症状重才需干预。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">潮热、盗汗日常怎么缓解？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">除上面放松技巧外，注意：戒烟（吸烟会加重潮热）、规律作息、适度运动、保持心情愉悦，做喜欢的事（散步、逛街、兴趣）转移注意力。饮食清淡、多蔬果蛋白，也有帮助。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">为什么更年期要特别注意补钙？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">雌激素下降会加速骨量流失，更年期是女性骨质疏松的高发窗口。补钙+维 D+负重运动（走路、哑铃）能有效减缓。日常奶类、豆制品、深绿菜都是好来源。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">情绪起伏大、失眠，怎么调？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">先把作息、运动、饮食稳住；可练习呼吸放松、正念冥想；多和亲友倾诉。短期失眠可尝试泡脚、听舒缓音乐。若持续数周、明显影响生活，应就医评估（见下条）。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">激素治疗适合所有人吗？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">不适合自行决定。激素补充治疗（HRT）需医生综合评估适应症与禁忌（如血栓史、某些肿瘤史等）后个体化制定，并定期随访。<div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>是否用药、用哪种方案，务必由妇科/内分泌专科医生判断，切勿跟风服用。</span></div></div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">什么情况一定要去医院？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">出现以下任一，请及时就医：异常阴道出血/排液、潮热盗汗严重到无法生活、情绪或睡眠崩溃、骨痛明显、或有胸闷心慌等不适。中医调理也建议在正规医疗机构进行。</div></div></div>
+          </div>
+        </div>
+
+        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《更年期潮热出汗难受怎么办》《更年期潮热出汗怎么办》《更年期出汗多怎么办》《更年期潮热出汗，可以吃什么调理》。</div>
+      </div></div></div></section>
+
+    <!-- 模块3 调理失眠 -->
+    <section class="module" data-accent="blue">
+      <button class="module-header" aria-expanded="false">
+        <span class="num" style="background:linear-gradient(135deg,#aebcc9,#8696a6)">3</span>
+        <span class="m-title"><h2>调理失眠</h2><p>睡得好，才是真的抗老与解压</p></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="collapsible"><div class="inner"><div class="body-pad">
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--blue)"></span><span class="tag" style="background:var(--blue)">放松技巧</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">睡前有哪些放松训练能帮助入睡？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">
+              三种常用且安全的方法：① <b>正念冥想</b>——专注呼吸、放下杂念，缓解焦虑；② <b>呼吸训练</b>——缓慢深长的腹式呼吸，降低心率；③ <b>渐进式肌肉放松</b>——从脚趾到头顶依次紧绷再放松。睡前也可泡脚、做眼周按摩、听舒缓音乐。
+              <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>尝试大部分方法仍难入睡或睡眠质量差，可到「睡眠门诊」或精神心理科，医生会给出专业方案。</span></div>
+              <div class="src"><span>腾讯医典</span>来源：《改善睡眠的小技巧》</div>
+            </div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--rose)"></span><span class="tag" style="background:var(--rose)">生理期小贴士</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">经期前后为什么更容易睡不好？怎么改善？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">经期前后激素波动会影响体温、情绪和痛感，部分人会入睡困难、多梦。可：白天适度运动、多晒太阳；睡前少咖啡因、少屏幕；用热水袋暖腹缓解不适；保持卧室黑暗安静。若痛经严重影响睡眠，请看妇科。</div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--olive)"></span><span class="tag" style="background:var(--olive)">其他高频问题</span></div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">女性为什么比男性更容易失眠？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">两大主因：一是<b>激素波动</b>——经前期、孕期、更年期三个特殊时期最易中招；二是<b>压力与情绪</b>——女性常工作家庭两头顾，更细腻也容易「想太多」，把紧张带进被窝。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">睡前喝什么、吃什么助眠？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">可喝温热的<b>玫瑰花茶、茉莉花茶</b>等安神花茶；吃些富含维矿的果蔬（猕猴桃、苹果、番茄）。避开浓茶、奶茶、咖啡、烈酒。晚餐别吃太油腻、别吃太撑。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">长期睡不好会带来什么后果？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">短期是疲惫、注意力下降；长期会牵连内分泌、情绪（更易焦虑烦躁）、皮肤（暗沉爆痘）、免疫力下降，甚至加重慢病。所以别硬扛，持续失眠要干预。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">白天运动真的能改善夜间睡眠吗？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">能。白天增加活动量、多晒太阳，有助于夜间入睡和睡眠深度；但睡前 2–3 小时避免剧烈运动，以免过度兴奋。午睡别太久，否则会「偷走」晚上的睡意。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">褪黑素能不能自己买来吃？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">不建议自行长期服用。失眠用药（包括助眠药、褪黑素类）都有适应症与注意事项，用错可能依赖或掩盖真实问题。<div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>反复失眠请到睡眠/精神心理科，由医生判断原因并开具合适方案。</span></div></div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">什么情况该去睡眠门诊 / 精神心理科？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">如果入睡困难、易醒、早醒持续数周以上，或明显影响白天状态、情绪，就别再「硬撑」。尤其当失眠伴随持续低落、焦虑、早醒（比平时早 2 小时）时，更要尽快就医评估。</div></div></div>
+          </div>
+        </div>
+
+        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《失眠是女性美丽的天敌，三个特殊时期易得睡眠障碍》《改善睡眠的小技巧》《睡眠质量差怎么办》《女人失眠多梦怎么办，如何不失眠》。</div>
+      </div></div></div></section>
+
+    <!-- 模块4 润颜焕活 -->
+    <section class="module" data-accent="peach">
+      <button class="module-header" aria-expanded="false">
+        <span class="num" style="background:linear-gradient(135deg,#e3c0ad,#cf9c84)">4</span>
+        <span class="m-title"><h2>润颜焕活</h2><p>由内而外的好气色与透亮肌</p></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="collapsible"><div class="inner"><div class="body-pad">
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--olive)"></span><span class="tag" style="background:var(--olive)">地中海食材清单</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">吃哪些食物能让气色红润、皮肤透亮？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">
+              好气色靠「吃对 + 代谢好」：多摄入<span style="color:var(--ink)">富含维 C</span>（鲜枣、柑橘、猕猴桃、番茄）帮助胶原与提亮；<span style="color:var(--ink)">维 E 与好脂肪</span>（坚果、橄榄油、牛油果）抗氧化；<span style="color:var(--ink)">含铁食物</span>（瘦肉、动物血、深绿菜）预防苍白；足量饮水。地中海式饮食（蔬果+全谷+鱼+橄榄油）对皮肤状态友好。
+              <div class="src"><span>腾讯医典</span><span>ima知识库·营养百科</span>来源：《抗衰老的食物有哪些》《为什么有人显老，有人显年轻？》</div>
+            </div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--sage)"></span><span class="tag" style="background:var(--sage)">推荐运动类型</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">运动出汗对皮肤是好是坏？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">适度运动促进血液循环、帮助代谢，气色会更红润；出汗后及时温水清洁、补水即可，对皮肤是好事。但别带妆剧烈运动、汗后别久捂，以免毛孔堵塞或敏感。</div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--rose)"></span><span class="tag" style="background:var(--rose)">其他高频问题</span></div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">为什么皮肤会暗沉、长斑？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">随年龄增长代谢减慢、黑色素更易堆积；紫外线、熬夜、糖化、情绪压力都会加重暗沉与色斑。对抗办法就是「防晒 + 抗氧化 + 好作息」三件套，必要时再考虑正规医美。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">胶原蛋白流失了，怎么「补」回来？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">① 补优质蛋白 + 维 C 促合成；② 防晒、戒烟、控糖减缓流失；③ 规律作息给皮肤修复时间。医美（点阵激光、射频）可刺激胶原新生，但属医疗行为，需正规机构评估。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">防晒到底怎么涂才有效？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">用量要足（面部约一枚硬币大小）、出门前 15–30 分钟涂；长时间户外每 2 小时补涂，出汗游泳后及时补；配合帽子/伞物理遮挡。阴天、室内靠窗也有紫外线，别偷懒。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">黑眼圈、眼袋怎么改善？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">先分类型：青紫色多因熬夜/循环差，靠睡眠和温敷；棕褐色多因日晒/色素，靠防晒；眼袋多因衰老+水肿，靠少盐、睡眠、冷敷。顽固型建议就医或正规医美评估。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">熬夜脸怎么急救？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">急救只能救急不救本：温水洁面后补水保湿、冷敷消水肿、适度按摩促进循环；多喝水、补维 C 果蔬。真正的「焕活」还是还债式补觉 + 长期规律作息。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">护肤品成分怎么挑不踩雷？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">按需求选：提亮看维 C、烟酰胺；抗老看 A 醇、多肽、玻色因；保湿看神经酰胺、透明质酸。敏感肌先耳后试用；A 醇孕期哺乳期慎用。皮肤问题严重、久治不愈，先看皮肤科。</div></div></div>
+          </div>
+        </div>
+
+        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《抗衰老的食物有哪些》《吃进去的胶原蛋白真的能美容吗？》《想要老得慢？做好这4件事》《为什么有人显老，有人显年轻？》；ima知识库·营养百科。</div>
+      </div></div></div></section>
+
+    <!-- 模块5 增肌减脂 -->
+    <section class="module" data-accent="olive">
+      <button class="module-header" aria-expanded="false">
+        <span class="num" style="background:linear-gradient(135deg,#b9b99a,#94946f)">5</span>
+        <span class="m-title"><h2>增肌减脂</h2><p>提高代谢，练出紧致线条</p></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="collapsible"><div class="inner"><div class="body-pad">
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--sage)"></span><span class="tag" style="background:var(--sage)">推荐运动类型</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">女性增肌减脂，到底该练什么？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">
+              核心是「<b>力量训练为主、有氧为辅</b>」：哑铃、弹力带、壶铃、自重（深蹲、臀桥、俯卧撑）练肌肉；跑步/游泳/跳绳做有氧燃脂。肌肉多了，基础代谢更高，躺着也多消耗。每周 3–4 次、循序渐进，比天天狂练更可持续。
+              <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>有关节疼痛、心慌等不适，或患有慢病，请先咨询医生/康复师再训练。</span></div>
+              <div class="src"><span>腾讯医典</span><span>ima知识库·减重知识库</span>来源：《怎么增肥啊》《健身前后怎样饮食才健康》《成人肥胖食养指南2024》</div>
+            </div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--olive)"></span><span class="tag" style="background:var(--olive)">地中海食材清单</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">减脂期怎么吃「地中海式」饮食不饿肚子？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">思路：每餐有<b>优质蛋白</b>（鱼、虾、蛋、豆制品）+ <b>大量蔬菜</b> + <b>适量全谷物</b>（燕麦、糙米、意面）+ 一小把坚果；用橄榄油烹饪，少油炸少糖。蛋白和纤维扛饿，比节食更不容易反弹。参考「女版减脂餐」总能量约 1200 kcal 的搭配思路，按需调整。</div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--blue)"></span><span class="tag" style="background:var(--blue)">其他高频问题</span></div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">女生练力量会变成「金刚芭比」吗？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">基本不会。女性睾酮水平远低于男性，很难练出大块肌肉；适度力量训练只会让线条更紧致、体态更挺拔，还能防肌肉流失、提升代谢。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">为什么女生减肥比男生难？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">女性肌肉量、基础代谢通常偏低，且受激素周期影响；长期待暖房、作息紊乱也会拖慢脂肪代谢。所以更要「吃够蛋白+力量训练+早睡早起规律吃饭」，靠科学而非蛮饿。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">运动后到底能不能吃东西？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">能吃，而且该吃。运动后 30–60 分钟是「黄金窗口」，补<b>碳水+蛋白质</b>（如鸡蛋+香蕉、牛奶+全麦）能恢复糖原、促进肌肉合成，反而更利减脂。完全不吃反而可能掉肌肉、代谢下降。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">怎么做到「只减脂肪、不丢肌肉」？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">关键三步：① 热量缺口别太大（每周减 0.5–1% 体重较稳）；② 保证蛋白质摄入；③ 坚持力量训练「告诉」身体保留肌肉。体重初期掉得快的多是水分和肌肉，慢慢来才真正减脂。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">蛋白质每天要吃够多少？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">减脂增肌期一般建议每公斤体重 1.2–1.6 g 优质蛋白（如 60 kg 约 72–96 g/天），分散到三餐更易吸收。来源优先鱼、蛋、豆制品、瘦肉、低脂奶。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">碰到平台期怎么办？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">平台期是正常的。可微调：调整训练强度/花样、复查饮食份量（常被低估）、保证睡眠和蛋白质、适当安排「休息周」。别靠极端节食硬砸，容易反弹伤代谢。</div></div></div>
+          </div>
+        </div>
+
+        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《能不能只减脂肪，不减肌肉呢？》《怎么增肥啊》《减肥不容易，可能是你方法不对！》《健身前后怎样饮食才健康》《3个被误解的减重真相》；ima知识库·减重知识库（《成人肥胖食养指南2024》）。</div>
+      </div></div></div></section>
+
+    <!-- 模块6 情绪管理 -->
+    <section class="module" data-accent="lav">
+      <button class="module-header" aria-expanded="false">
+        <span class="num" style="background:linear-gradient(135deg,#bcb3cb,#9b90ad)">6</span>
+        <span class="m-title"><h2>情绪管理</h2><p>与波动和平共处，守住内在稳定</p></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="collapsible"><div class="inner"><div class="body-pad">
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--lav)"></span><span class="tag" style="background:var(--lav)">放松技巧</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">焦虑、压力大时，有哪些马上能用的放松法？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">
+              随身可用的「情绪急救包」：① <b>4-7-8 呼吸</b>——吸气4秒、屏息7秒、慢呼8秒，重复几次；② <b>正念冥想/身体扫描</b>——把注意力拉回当下；③ <b>渐进式肌肉放松</b>；④ 写「情绪日记」把念头外化；⑤ 找信任的人聊一聊。研究证实这些能降低焦虑、愤怒与抑郁感。
+              <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>若紧张、担心、身体不适感持续且明显影响生活，请到精神心理科/心身医学科评估。</span></div>
+              <div class="src"><span>腾讯医典</span>来源：《改善睡眠的小技巧》《为何女性更易焦虑？》</div>
+            </div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--rose)"></span><span class="tag" style="background:var(--rose)">生理期小贴士</span></div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">经前期为什么容易情绪低落、易怒？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">经前期紧张综合征常出现在月经前 1–2 周，表现为烦躁、情绪不稳、焦虑，还可能伴水肿、胀痛。这是激素波动带来的正常反应，可通过规律运动、睡眠、减少刺激、与家人沟通来舒缓；若严重到影响生活，可就医。</div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--olive)"></span><span class="tag" style="background:var(--olive)">其他高频问题</span></div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">为什么女性更容易焦虑？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">研究显示女性焦虑症发病率高于男性。原因包括：激素波动影响情绪调节中枢（杏仁核）；女性更倾向「反刍」——反复想负面事；再加上婚姻、人际、家庭多重角色压力，长期应激更易焦虑。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">经前期、孕期、更年期，为什么情绪起伏特别大？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">这三个都是<b>激素剧烈波动</b>的特殊时期，内分泌变化会直接牵动情绪中枢。理解「这不是我脆弱，是激素在作怪」，有助于减少自我苛责，再用作息、运动、倾诉去缓冲。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">长期压力会对身体造成什么影响？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">长期压力会打乱睡眠、内分泌，牵连免疫力、消化、皮肤，甚至诱发焦虑抑郁，与失眠互相加重。把「心理健保」当成和健身一样日常的功课，定期放松、及时疏解很重要。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">怎么判断自己需要寻求专业帮助？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">信号包括：情绪低落在大部分时间持续 2 周以上、对事物失去兴趣、睡眠食欲明显改变、莫名躯体疼痛、出现「活着没意思」等念头。<div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>出现上述任一条，尤其有自伤/轻生念头，请立即到精神心理科或拨打心理援助热线，别独自硬扛。</span></div></div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">运动对改善情绪真的有用吗？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">有用。运动能促进内啡肽、改善睡眠、转移注意力，是天然的情绪调节器。哪怕快走 20 分钟、跳段舞、做做瑜伽，都能让紧绷的神经松一口气。关键是「动起来」比「动多少」更重要。</div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">什么情况必须就医？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">当焦虑/低落持续加重、伴躯体症状（心慌、头痛、肠胃不适查无明确病因）、睡眠崩溃、或影响工作人际，就应及时就医。某些躯体疾病（如甲亢）也会表现为焦虑，需内分泌科排查。</div></div></div>
+          </div>
+        </div>
+
+        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《为何女性更易焦虑？》《女性为何易焦虑？如何走出焦虑？》《改善睡眠的小技巧》。</div>
+      </div></div></div></section>
+
+    <!-- 模块7 地中海食材大全 -->
+    <section class="module" data-accent="olive">
+      <button class="module-header" aria-expanded="false">
+        <span class="num" style="background:linear-gradient(135deg,#b9b99a,#94946f)">7</span>
+        <span class="m-title"><h2>地中海食材大全</h2><p>东西方健康食材合并收藏，照着吃更养人</p></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="collapsible"><div class="inner"><div class="body-pad">
+
+        <div class="lib-note">下列食材融合 <b>地中海饮食</b> 与 <b>东方膳食模式</b>（如全谷物、豆制品、薯类、菌菇、海藻等）的健康推荐，统一归入「地中海式健康食材」收藏。均指日常膳食参考，非治疗用途。</div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--olive)"></span><span class="tag" style="background:var(--olive)">主食 · 全谷物与薯类</span></div>
+          <img class="cat-img" alt="主食·全谷物与薯类 水彩" src="assets/img1.png">
+          <div class="lib-item"><span class="lib-name">燕麦</span><span class="lib-desc">富含 <b>β-葡聚糖</b> 可溶性纤维，稳血糖、扛饿，早餐友好（东西方通用）。</span></div>
+          <div class="lib-item"><span class="lib-name">糙米</span><span class="lib-desc">保留麸皮胚芽，<b>B 族维生素</b>与膳食纤维高于白米，低 GI。</span></div>
+          <div class="lib-item"><span class="lib-name">全麦面包 / 意面</span><span class="lib-desc">地中海餐桌常见主食，选配料表首位为全麦粉者，饱腹感强。</span></div>
+          <div class="lib-item"><span class="lib-name">荞麦</span><span class="lib-desc">含 <b>芦丁</b> 等黄酮，对血管友好，东方（中日）传统谷物。</span></div>
+          <div class="lib-item"><span class="lib-name">藜麦</span><span class="lib-desc">含完全蛋白、低 GI，原产南美，现属全球健康主食。</span></div>
+          <div class="lib-item"><span class="lib-name">红薯 / 紫薯</span><span class="lib-desc">薯类主食，富 <b>β-胡萝卜素</b> 与纤维，东方膳食推荐的粗粮。</span></div>
+          <div class="lib-item"><span class="lib-name">玉米</span><span class="lib-desc">粗粮主食，膳食纤维丰富，蒸煮皆可。</span></div>
+          <div class="lib-item"><span class="lib-name">小米</span><span class="lib-desc">东方传统养胃谷物，B 族丰富，易消化。</span></div>
+          <div class="lib-item"><span class="lib-name">青稞</span><span class="lib-desc">高原谷物，<b>β-葡聚糖</b> 含量高，东方特色粗粮。</span></div>
+          <div class="lib-item"><span class="lib-name">杂豆（红豆/绿豆/鹰嘴豆）</span><span class="lib-desc">可部分替代主食，又补植物蛋白与纤维。</span></div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--rose)"></span><span class="tag" style="background:var(--rose)">蛋白质 · 海陆兼修</span></div>
+          <img class="cat-img" alt="蛋白质·海陆兼修 水彩" src="assets/img2.png">
+          <div class="lib-item"><span class="lib-name">三文鱼 / 沙丁鱼</span><span class="lib-desc">地中海核心，富含 <b>Omega-3</b> 抗炎、护心脑。</span></div>
+          <div class="lib-item"><span class="lib-name">虾 / 鱼类</span><span class="lib-desc">优质低脂蛋白，易吸收，补微量元素。</span></div>
+          <div class="lib-item"><span class="lib-name">鸡蛋</span><span class="lib-desc">高生物价蛋白，性价比之王，每天 1 个无负担。</span></div>
+          <div class="lib-item"><span class="lib-name">豆制品（豆腐/豆浆/纳豆）</span><span class="lib-desc">东方膳食核心，植物蛋白 + <b>大豆异黄酮</b>，对女性友好。</span></div>
+          <div class="lib-item"><span class="lib-name">瘦肉（鸡胸 / 牛肉）</span><span class="lib-desc">补铁补蛋白，预防贫血与肌肉流失。</span></div>
+          <div class="lib-item"><span class="lib-name">无糖酸奶 / 希腊酸奶</span><span class="lib-desc">益生菌 + 钙，护肠又护骨。</span></div>
+          <div class="lib-item"><span class="lib-name">坚果种子（核桃/杏仁/芝麻/奇亚籽）</span><span class="lib-desc">好脂肪 + 维 E，每日一小把即可。</span></div>
+          <div class="lib-item"><span class="lib-name">奶酪（适量）</span><span class="lib-desc">地中海常用补钙食物，选天然发酵、少盐款。</span></div>
+          <div class="lib-item"><span class="lib-name">小鱼小虾 / 贝类</span><span class="lib-desc">连骨吃可补钙，富锌硒。</span></div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--sage)"></span><span class="tag" style="background:var(--sage)">蔬菜 · 五色入餐</span></div>
+          <img class="cat-img" alt="蔬菜·五色入餐 水彩" src="assets/img3.png">
+          <div class="lib-item"><span class="lib-name">深绿叶菜（菠菜/西兰花/油菜）</span><span class="lib-desc">叶酸、维 K、镁，东西方共推的「基础蔬菜」。</span></div>
+          <div class="lib-item"><span class="lib-name">番茄</span><span class="lib-desc">含 <b>番茄红素</b> 抗氧化，地中海标志性蔬菜，熟吃更利吸收。</span></div>
+          <div class="lib-item"><span class="lib-name">彩椒</span><span class="lib-desc">维 C 丰富，颜色越艳营养密度越高。</span></div>
+          <div class="lib-item"><span class="lib-name">胡萝卜</span><span class="lib-desc">β-胡萝卜素，护眼护皮肤。</span></div>
+          <div class="lib-item"><span class="lib-name">菌菇（香菇/木耳/金针菇）</span><span class="lib-desc">东方膳食重要成员，含多糖与膳食纤维，提鲜又低卡。</span></div>
+          <div class="lib-item"><span class="lib-name">十字花科（甘蓝/菜花/芥蓝）</span><span class="lib-desc">含硫苷类物质，有助正常代谢。</span></div>
+          <div class="lib-item"><span class="lib-name">紫甘蓝</span><span class="lib-desc">花青素抗氧化，凉拌生食保留更多营养。</span></div>
+          <div class="lib-item"><span class="lib-name">茄子</span><span class="lib-desc">地中海常见，少油清蒸 / 烤制更健康。</span></div>
+          <div class="lib-item"><span class="lib-name">海藻（海带/紫菜/裙带菜）</span><span class="lib-desc">东方膳食特色，富碘与褐藻多糖，凉拌做汤皆宜。</span></div>
+          <div class="lib-item"><span class="lib-name">黄瓜 / 冬瓜</span><span class="lib-desc">高水分、低热量，清热利水，减脂期友好。</span></div>
+        </div>
+
+        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《抗衰老的食物有哪些》《地中海饮食是什么》；ima知识库·营养百科（《中国居民膳食指南2022》《中国营养科学全书》）；东方膳食模式（全谷物、豆制品、薯类、菌藻）相关科普。</div>
+      </div></div></div></section>
+
+    <!-- 模块8 运动库 -->
+    <section class="module" data-accent="sage">
+      <button class="module-header" aria-expanded="false">
+        <span class="num" style="background:linear-gradient(135deg,#9bb3aa,#7e9a90)">8</span>
+        <span class="m-title"><h2>运动库</h2><p>抗阻 · 有氧 · 身心，三类运动全收录</p></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="collapsible"><div class="inner"><div class="body-pad">
+
+        <div class="lib-note">运动顺序参考：<b>抗阻运动</b> 打头激活肌肉与代谢，<b>中等强度有氧</b> 居中燃脂，<b>身心运动</b> 收尾放松。开始前请充分热身；如有关节疼痛、心脑血管疾病或慢病，建议先咨询医生 / 康复师（<b>建议就医</b>）。</div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--sage)"></span><span class="tag" style="background:var(--sage)">抗阻运动（置顶）</span></div>
+          <img class="cat-img" alt="抗阻运动 水彩" src="assets/img4.png">
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">哑铃训练怎么做？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>选能标准完成 8–12 次的重量；动作慢起慢落、控制离心；优先练腿、背、胸等大肌群；每周 2–3 次，组间与练后给肌肉恢复时间。<br><b>注意事项：</b>避免憋气；动作变形立即减重；肩颈或腰背出现刺痛马上停止。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">弹力带怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>固定好一端，对抗阻力匀速发力；可替代哑铃练上肢与臀腿，便携易收纳。<br><b>注意事项：</b>用前检查有无裂口；回弹时别松手弹到自己；手腕保持中立位。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">壶铃怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>以髋为轴做摆荡，核心收紧、臀部发力；先练熟摆荡再进阶。<br><b>注意事项：</b>别用腰椎代偿发力；落点避开脚面；新手先空手练动作模式。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">自重深蹲怎么做？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>双脚与肩同宽，下蹲至大腿约与地面平行，膝盖朝脚尖方向、不内扣，重心落在脚跟。<br><b>注意事项：</b>膝盖不过度前移、不内扣；膝髋不适就减小幅度，可扶椅辅助。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">臀桥怎么做？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>仰卧屈膝，用臀肌发力顶起髋部至肩—髋—膝成一条线，顶端停 1–2 秒再下落。<br><b>注意事项：</b>避免过度挺腰；腰椎有不适则减小幅度。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">俯卧撑（含退阶）怎么做？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>核心收紧、身体成直线；新手用跪姿或推墙退阶，逐步加量。<br><b>注意事项：</b>手腕痛可改拳撑或上斜；肩峰刺痛即停。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">箭步蹲怎么做？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>向前迈步下蹲，前后腿约呈 90°，重心居中，再收回站立。<br><b>注意事项：</b>膝盖不内扣、不撞地；膝踝不稳可扶墙；膝旧伤慎做。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">平板支撑怎么做？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>前臂撑地、身体成直线，收紧腹臀、自然呼吸；从 30 秒起循序渐进。<br><b>注意事项：</b>塌腰或撅臀都属错误；腰背痛立即停止；不要憋气。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">硬拉（壶铃/哑铃）怎么做？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>屈髋屈膝俯身抓铃，背部挺直，靠臀腿发力站起，器械贴近身体。<br><b>注意事项：</b>全程背部不能圆；腰背不适应马上停。<div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>若硬拉后持续腰背酸痛或放射痛，请到骨科 / 康复科就诊，排查椎间盘等问题。</span></div></div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--blue)"></span><span class="tag" style="background:var(--blue)">中等强度有氧运动</span></div>
+          <img class="cat-img" alt="中等强度有氧 水彩" src="assets/img5.png">
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">快走怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>步伐轻快，配速以「能说话但略喘」为宜；挺胸摆臂，每次 30 分钟以上。<br><b>注意事项：</b>穿缓冲好、合脚的鞋；膝踝痛改游泳；胸闷头晕即停。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">慢跑怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>小步高频、落地轻；跑走结合起步；每周增量不超过 10%。<br><b>注意事项：</b>跑前热身、跑后拉伸；膝痛减量或换低冲击。<div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>跑步中出现胸痛、憋气或心悸，请立即停止并到心内科评估。</span></div></div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">游泳怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>选熟悉泳姿，保持节奏呼吸；全身低冲击有氧。<br><b>注意事项：</b>空腹或过饱不下水；抽筋先停游靠边；耳朵进水及时处理。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">骑车（室内外）怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>座椅高度调至腿微屈，保持踏频；室内外皆可。<br><b>注意事项：</b>调好车把与座高防腰背痛；户外遵守交规；膝痛检查坐姿。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">跳绳怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>前脚掌轻跳、膝盖微屈缓冲，手腕摇绳；短时多次。<br><b>注意事项：</b>穿减震鞋、在软地跳；膝踝 / 足底不适即停；大体重者先快走。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">椭圆机怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>全脚掌踩实、手脚协调，反向踩可多练臀。<br><b>注意事项：</b>扶稳不松手；头晕即停；膝痛调低阻力。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">爬楼 / 登山机怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>身体微前倾，全脚踩实台阶，节奏稳定。<br><b>注意事项：</b>膝髋不适减小强度；扶栏防滑；心率过高就减速。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">健身操 / 舞蹈怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>跟节奏动起来，选适合强度；居家跟练方便。<br><b>注意事项：</b>关节不适降幅度；穿运动鞋、不在湿滑处跳；胸闷即停。</div></div></div>
+          </div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--lav)"></span><span class="tag" style="background:var(--lav)">身心运动（收尾）</span></div>
+          <img class="cat-img" alt="身心运动 水彩" src="assets/img6.png">
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">瑜伽怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>配合呼吸缓慢进入体式，关注身体感受；柔韧与放松兼顾。<br><b>注意事项：</b>不强迫压伸；颈腰有伤避开倒立扭转；疼痛即退。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">太极怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>缓慢连贯、重心转移，调身调息；适合日常练习。<br><b>注意事项：</b>地面防滑；眩晕者放慢；膝痛控制屈膝深度。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">普拉提怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>强调核心控制与呼吸，动作精准；可垫上或器械。<br><b>注意事项：</b>颈腰有伤需专业指导；别用颈部代偿；不适即停。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">八段锦怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>八式连贯，配合呼吸与意念；舒展筋骨、宁心安神。<br><b>注意事项：</b>动作柔和、不憋气；眩晕放慢；循序渐进。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">正念步行怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>放慢脚步，感受脚触地与呼吸，把注意力拉回当下。<br><b>注意事项：</b>选安全平坦路线；头晕即止；不与高强度同日过度叠加。</div></div></div>
+          </div>
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">拉伸放松怎么做？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>运动收尾做静态拉伸，每个部位保持 15–30 秒，微酸不剧痛。<br><b>注意事项：</b>不弹震式猛拉；关节疼痛处避开；肌肉拉伤急性期不拉。</div></div></div>
+          </div>
+        </div>
+
+        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《女人35岁以后如何保养更年轻》《健身前后怎样饮食才健康》；ima知识库·减重知识库（《成人肥胖食养指南2024》）。</div>
+      </div></div></div></section>
+
+  </div>
+
+  <div class="no-result" id="noResult">没有找到匹配的问题，换个关键词试试～</div>
+
+  <footer>
+    <h3>关于本 Q&amp;A 库</h3>
+    <p>本库面向 35+ 女性，聚焦「健康生活方式」改善八大模块问题，内容参考 <b>腾讯医典</b> 官方科普与 <b>ima 知识库</b>（营养百科、减重知识库等），以通俗语言整理，便于日常理解与实践。</p>
+    <div class="disclaimer">
+      <b>免责声明：</b>本库仅作健康科普与生活方式参考，<b>不构成任何医疗诊断、治疗建议或替代专业诊疗</b>。每个人的身体状况不同，出现不适应及时前往正规医疗机构就诊；涉及用药、激素治疗、医美、长期失眠/情绪问题等，请遵循医生或专业人士指导。文中标注「建议就医」的情形，均请优先咨询专业医生。
+    </div>
+  </footer>
+</div>
+
+<script>
+  // 模块展开/收起
+  document.querySelectorAll('.module-header').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var m = btn.closest('.module');
+      var open = m.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+  // 问题展开/收起
+  document.querySelectorAll('.q').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btn.classList.toggle('open');
+    });
+  });
+  // 搜索过滤
+  var input = document.getElementById('search');
+  var noResult = document.getElementById('noResult');
+  input.addEventListener('input', function(){
+    var kw = input.value.trim().toLowerCase();
+    var anyVisible = false;
+    document.querySelectorAll('.module').forEach(function(m){
+      var hits = 0;
+      // Q&A 条目
+      m.querySelectorAll('.qa').forEach(function(item){
+        var qt = item.querySelector('.qtext');
+        var match = !kw || (qt && qt.textContent.toLowerCase().indexOf(kw) > -1);
+        item.style.display = match ? '' : 'none';
+        if(match) hits++;
+      });
+      // 大全/库 条目
+      m.querySelectorAll('.lib-item').forEach(function(item){
+        var match = !kw || item.textContent.toLowerCase().indexOf(kw) > -1;
+        item.style.display = match ? '' : 'none';
+        if(match) hits++;
+      });
+      m.style.display = hits ? '' : 'none';
+      if(hits) anyVisible = true;
+      // 搜索时自动展开命中模块
+      if(kw && hits){ m.classList.add('open'); m.querySelector('.module-header').setAttribute('aria-expanded','true'); }
+    });
+    noResult.style.display = anyVisible ? 'none' : 'block';
+  });
+</script>
+</body>
+</html>
