@@ -847,33 +847,66 @@
       btn.classList.toggle('open');
     });
   });
-  // 搜索过滤
+  // 搜索过滤：相关大模块优先（标题命中>命中数），再展示其他大类中相关 Q&A
   var input = document.getElementById('search');
   var noResult = document.getElementById('noResult');
+  var modulesBox = document.getElementById('modules');
+  var moduleEls = Array.from(modulesBox.querySelectorAll('.module'));
+  var originalOrder = moduleEls.slice(); // 记录原始顺序，清空搜索时复原
+
+  function titleText(m){
+    var t = m.querySelector('.m-title');
+    return (t ? t.textContent : '').toLowerCase();
+  }
+  function expand(m){
+    m.classList.add('open');
+    var b = m.querySelector('.module-header'); if(b) b.setAttribute('aria-expanded','true');
+  }
+  function collapse(m){
+    m.classList.remove('open');
+    var b = m.querySelector('.module-header'); if(b) b.setAttribute('aria-expanded','false');
+  }
+
   input.addEventListener('input', function(){
     var kw = input.value.trim().toLowerCase();
-    var anyVisible = false;
-    document.querySelectorAll('.module').forEach(function(m){
+    // 清空搜索：复原原始顺序、显示全部、折叠回默认
+    if(!kw){
+      originalOrder.forEach(function(m){ modulesBox.appendChild(m); m.style.display=''; });
+      document.querySelectorAll('.qa').forEach(function(it){ it.style.display=''; });
+      document.querySelectorAll('.lib-item').forEach(function(it){ it.style.display=''; });
+      moduleEls.forEach(collapse);
+      noResult.style.display='none';
+      return;
+    }
+    var scored = [];
+    moduleEls.forEach(function(m){
       var hits = 0;
-      // Q&A 条目
+      // Q&A 条目：同时匹配「问题 + 答案」
       m.querySelectorAll('.qa').forEach(function(item){
         var qt = item.querySelector('.qtext');
-        var match = !kw || (qt && qt.textContent.toLowerCase().indexOf(kw) > -1);
+        var bd = item.querySelector('.a-body');
+        var hay = (qt?qt.textContent:'') + ' ' + (bd?bd.textContent:'');
+        var match = hay.toLowerCase().indexOf(kw) > -1;
         item.style.display = match ? '' : 'none';
         if(match) hits++;
       });
       // 大全/库 条目
       m.querySelectorAll('.lib-item').forEach(function(item){
-        var match = !kw || item.textContent.toLowerCase().indexOf(kw) > -1;
+        var match = item.textContent.toLowerCase().indexOf(kw) > -1;
         item.style.display = match ? '' : 'none';
         if(match) hits++;
       });
       m.style.display = hits ? '' : 'none';
-      if(hits) anyVisible = true;
-      // 搜索时自动展开命中模块
-      if(kw && hits){ m.classList.add('open'); m.querySelector('.module-header').setAttribute('aria-expanded','true'); }
+      if(hits){
+        var titleHit = titleText(m).indexOf(kw) > -1;
+        // 标题命中的大模块权重极高，其次按命中条数排序
+        scored.push({el:m, score:(titleHit?1000:0) + hits});
+      }
     });
-    noResult.style.display = anyVisible ? 'none' : 'block';
+    scored.sort(function(a,b){ return b.score - a.score; });
+    // 重排：相关大模块置顶并展开，其余命中大类紧随其后
+    scored.forEach(function(s){ modulesBox.appendChild(s.el); expand(s.el); });
+    noResult.style.display = scored.length ? 'none' : 'block';
   });
 </script>
 </body>
