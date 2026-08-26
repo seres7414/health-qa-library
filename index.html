@@ -867,21 +867,28 @@
     var b = m.querySelector('.module-header'); if(b) b.setAttribute('aria-expanded','false');
   }
 
+  function closeQA(item){ var b=item.querySelector('.q'); if(b) b.classList.remove('open'); }
+  function openQA(item){ var b=item.querySelector('.q'); if(b) b.classList.add('open'); }
+
   input.addEventListener('input', function(){
     var kw = input.value.trim().toLowerCase();
     // 清空搜索：复原原始顺序、显示全部、折叠回默认
     if(!kw){
       originalOrder.forEach(function(m){ modulesBox.appendChild(m); m.style.display=''; });
-      document.querySelectorAll('.qa').forEach(function(it){ it.style.display=''; });
+      document.querySelectorAll('.qa').forEach(function(it){ it.style.display=''; closeQA(it); });
       document.querySelectorAll('.lib-item').forEach(function(it){ it.style.display=''; });
+      document.querySelectorAll('.cat').forEach(function(c){ c.style.display=''; });
       moduleEls.forEach(collapse);
       noResult.style.display='none';
       return;
     }
+    // 搜索前先收起所有 Q&A，避免残留展开状态
+    document.querySelectorAll('.qa').forEach(closeQA);
+
     var scored = [];
     moduleEls.forEach(function(m){
       var hits = 0;
-      // Q&A 条目：同时匹配「问题 + 答案」
+      // Q&A 条目：同时匹配「问题 + 答案正文」
       m.querySelectorAll('.qa').forEach(function(item){
         var qt = item.querySelector('.qtext');
         var bd = item.querySelector('.a-body');
@@ -904,8 +911,27 @@
       }
     });
     scored.sort(function(a,b){ return b.score - a.score; });
+
     // 重排：相关大模块置顶并展开，其余命中大类紧随其后
-    scored.forEach(function(s){ modulesBox.appendChild(s.el); expand(s.el); });
+    scored.forEach(function(s, idx){
+      modulesBox.appendChild(s.el);
+      expand(s.el);
+      if(idx === 0){
+        // 加权最高的大模块：所有内容完全显示（不折叠、不隐藏任何条目/分类）
+        s.el.querySelectorAll('.cat').forEach(function(c){ c.style.display=''; });
+        s.el.querySelectorAll('.qa').forEach(function(item){ item.style.display=''; openQA(item); });
+        s.el.querySelectorAll('.lib-item').forEach(function(item){ item.style.display=''; });
+      } else {
+        // 其他命中大类：隐藏没有命中项的空分类，避免只有分类标签
+        s.el.querySelectorAll('.cat').forEach(function(cat){
+          var has = false;
+          cat.querySelectorAll('.qa, .lib-item').forEach(function(child){
+            if(child.style.display !== 'none') has = true;
+          });
+          cat.style.display = has ? '' : 'none';
+        });
+      }
+    });
     noResult.style.display = scored.length ? 'none' : 'block';
   });
 </script>
