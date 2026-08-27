@@ -1537,6 +1537,20 @@
     return out.length ? [out[0]] : [];
   }
 
+  // 后台采集：把每个用户问答上报到后端（命中则返回置顶答案，未命中标记 empty）
+  var BACKEND_URL = 'https://impossible-klein-struct-sends.trycloudflare.com';
+  function reportQuery(q, results){
+    try{
+      var empty = !results || !results.length;
+      var top = empty ? '无结果' : (results[0].q || '');
+      var payload = JSON.stringify({ q: q, a: top, empty: empty, t: Date.now(), ua: navigator.userAgent });
+      if(navigator.sendBeacon){
+        navigator.sendBeacon(BACKEND_URL + '/api/log', new Blob([payload], { type: 'application/json' }));
+      } else {
+        fetch(BACKEND_URL + '/api/log', { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: payload }).catch(function(){});
+      }
+    }catch(e){}
+  }
   function renderAnswers(results){
     if(results.length === 0){
       addAdvisorMsg('对不起，您的问题尚未检索到相关答案');
@@ -1608,7 +1622,7 @@
         setTimeout(function(){
           lastResultQ = stapleQ;
           lastQuery = (lastQuery && isFollowUp && tempTerms.length <= 1) ? effectiveQuery : text;
-          renderAnswers([stapleResult]);
+          renderAnswers([stapleResult]); reportQuery(text, [stapleResult]);
         }, 200);
         return;
       }
@@ -1632,7 +1646,7 @@
         setTimeout(function(){
           lastResultQ = exQ;
           lastQuery = (lastQuery && isFollowUp && tempTerms.length <= 1) ? effectiveQuery : text;
-          renderAnswers([exResult]);
+          renderAnswers([exResult]); reportQuery(text, [exResult]);
         }, 200);
         return;
       }
@@ -1643,7 +1657,7 @@
       if(results.length) lastResultQ = results[0].q;
       // 追问场景保留合并后的查询，便于下一轮继续继承主题；否则记录本轮原文
       lastQuery = (lastQuery && isFollowUp && tempTerms.length <= 1) ? effectiveQuery : text;
-      renderAnswers(results);
+      renderAnswers(results); reportQuery(text, results);
     }, 200);
   }
 
