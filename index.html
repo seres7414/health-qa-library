@@ -27,6 +27,8 @@
       linear-gradient(160deg,#f7f3ee 0%, #f1ece6 45%, #eef0ea 100%);
     background-attachment:fixed;
     min-height:100vh;
+    display:flex; flex-direction:column; align-items:center;
+    padding:0 16px 50px;
   }
   /* watercolor blob decoration */
   .blob{position:fixed; border-radius:50%; filter:blur(40px); opacity:.5; z-index:0; pointer-events:none;}
@@ -34,7 +36,7 @@
   .blob.b2{width:300px;height:300px;right:-70px;top:40%;background:radial-gradient(circle at 40% 40%, var(--rose), transparent 70%);}
   .blob.b3{width:260px;height:260px;left:20%;bottom:-60px;background:radial-gradient(circle at 50% 50%, var(--lav), transparent 70%);}
 
-  .wrap{position:relative; z-index:1; max-width:880px; margin:0 auto; padding:26px 18px 80px;}
+  .wrap{position:relative; z-index:1; width:100%; max-width:880px; flex:1; display:flex; flex-direction:column; padding:26px 18px 0;}
 
   header.hero{
     background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
@@ -64,55 +66,70 @@
   .module{
     background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
     border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);
-    margin-bottom:16px; overflow:hidden; transition:border-color .3s;
+    margin-bottom:18px; overflow:hidden; transition:border-color .3s;
   }
   .module-header{
     display:flex; align-items:center; gap:14px; width:100%; text-align:left; cursor:pointer;
-    padding:20px 22px; background:none; border:none; font-family:inherit; color:var(--ink);
+    padding:17px 20px; background:none; border:none; font-family:inherit; color:var(--ink);
   }
   .num{
-    flex:0 0 auto; width:42px; height:42px; border-radius:14px; display:grid; place-items:center;
-    font-family:"Noto Serif SC",serif; font-weight:700; font-size:18px; color:#fff;
+    flex:0 0 auto; width:40px; height:40px; border-radius:14px; display:grid; place-items:center;
+    font-family:"Noto Serif SC",serif; font-weight:700; font-size:17px; color:#fff;
     box-shadow:0 6px 16px -6px rgba(90,80,70,.5);
   }
   .m-title{flex:1;}
-  .m-title h2{font-family:"Noto Serif SC",serif; font-weight:600; font-size:20px; margin:0; letter-spacing:.03em;}
-  .m-title p{margin:3px 0 0; font-size:12.5px; color:var(--ink-soft); font-weight:300;}
+  .m-title h2{font-family:"Noto Serif SC",serif; font-weight:600; font-size:19px; margin:0; letter-spacing:.03em;}
+  .m-title p{margin:3px 0 0; font-size:12px; color:var(--ink-soft); font-weight:300;}
   .chev{flex:0 0 auto; width:26px; height:26px; transition:transform .35s ease; color:var(--ink-soft);}
   .module.open .chev{transform:rotate(180deg);}
 
   .collapsible{display:grid; grid-template-rows:0fr; transition:grid-template-rows .4s ease;}
   .module.open .collapsible{grid-template-rows:1fr;}
   .collapsible > .inner{overflow:hidden;}
-  .body-pad{padding:4px 22px 24px;}
+  .body-pad{padding:8px 20px 22px;}
 
-  .cat{margin-top:14px;}
+  .cat{margin-top:16px;}
   .cat-title{
-    display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:var(--ink);
+    display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:500; color:var(--ink);
     letter-spacing:.04em; margin:0 0 6px;
   }
   .cat-title .dot{width:8px;height:8px;border-radius:50%;}
   .cat-title .tag{font-size:11.5px; color:#fff; padding:1px 9px; border-radius:999px; font-weight:400; letter-spacing:.02em;}
 
-  .qa{border-top:1px dashed var(--line);}
+  .qa{display:flex; flex-direction:column; gap:8px; margin:10px 0;}
   .cat > .qa:first-of-type{border-top:none;}
   .q{
-    display:flex; align-items:center; gap:10px; width:100%; text-align:left; cursor:pointer;
-    padding:13px 4px; background:none; border:none; font-family:inherit; color:var(--ink);
-    font-size:15px; font-weight:400; line-height:1.5;
+    align-self:flex-end; max-width:84%;
+    display:flex; align-items:center; gap:10px; text-align:left; cursor:pointer;
+    padding:10px 14px; appearance:none; -webkit-appearance:none;
+    background:linear-gradient(135deg, rgba(173,164,188,.30), rgba(157,170,184,.22));
+    border:1px solid var(--line); border-radius:18px 18px 6px 18px;
+    box-shadow:0 8px 18px -12px rgba(90,80,70,.45);
+    font-family:inherit; color:var(--ink); font-size:14px; font-weight:400; line-height:1.5;
   }
   .q .qmark{
-    flex:0 0 auto; width:22px;height:22px;border-radius:50%; background:rgba(138,163,155,.22);
-    color:var(--sage); font-weight:700; font-size:13px; display:grid; place-items:center; font-family:"Noto Serif SC",serif;
+    order:3; flex:0 0 auto; width:24px;height:24px;border-radius:50%;
+    background:linear-gradient(135deg,#c9a9a6,#b08e8b); color:#fff; font-weight:700; font-size:13px;
+    display:grid; place-items:center; font-family:"Noto Serif SC",serif; box-shadow:0 3px 8px -3px rgba(90,80,70,.5);
   }
-  .q .qtext{flex:1;}
-  .q .qc{width:18px;height:18px; color:var(--ink-soft); transition:transform .3s; flex:0 0 auto;}
+  .q .qtext{flex:1; order:1;}
+  .q .qc{order:2; width:18px;height:18px; color:var(--ink-soft); transition:transform .3s; flex:0 0 auto;}
   .q.open .qc{transform:rotate(45deg);}
 
-  .a{display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s ease;}
+  .a{align-self:flex-start; width:88%; max-width:88%; display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s ease;}
   .q.open + .a{grid-template-rows:1fr;}
-  .a > .ainner{overflow:hidden;}
-  .a-body{padding:2px 4px 14px 36px; font-size:14px; color:var(--ink-soft); font-weight:300;}
+  .a > .ainner{
+    overflow:hidden; display:flex; gap:10px; align-items:flex-start;
+    background:var(--glass-strong); border:1px solid var(--line);
+    border-radius:18px 18px 18px 6px; box-shadow:0 8px 18px -12px rgba(90,80,70,.40);
+    padding:11px 14px;
+  }
+  .a > .ainner::before{
+    content:"A"; flex:0 0 auto; width:30px;height:30px;border-radius:50%;
+    background:linear-gradient(135deg,#9bb3aa,#7e9a90); color:#fff; font-weight:700; font-size:14px;
+    display:grid; place-items:center; font-family:"Noto Serif SC",serif; box-shadow:0 4px 10px -4px rgba(90,80,70,.5);
+  }
+  .a-body{padding:2px 0 0; font-size:13.5px; color:var(--ink-soft); font-weight:300; line-height:1.7; flex:1;}
   .a-body b{color:var(--ink); font-weight:500;}
 
   .see-doctor{
@@ -158,14 +175,79 @@
   .lib-desc b{color:var(--ink); font-weight:500;}
   .cat-img{display:block; width:100%; height:auto; border-radius:16px; margin:10px 0 6px; border:1px solid var(--line); box-shadow:0 6px 18px -10px rgba(90,80,70,.35); max-height:240px; object-fit:cover;}
 
+  /* ====== 对话框问答模式 ====== */
+  #chatView{display:block;}
+  #libraryView{display:none;}
+
+  .chat-card{width:100%; max-width:720px; margin:0 auto; flex:1; min-height:340px; max-height:680px; display:flex; flex-direction:column; background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--line); border-bottom:14px solid rgba(247,243,238,0.85); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; padding-bottom:14px; box-sizing:border-box;}
+  .chat-head{display:flex; align-items:center; gap:9px; padding:11px 18px; border-bottom:1px solid var(--line); background:linear-gradient(135deg, rgba(155,179,170,.22), rgba(173,164,188,.16)); flex-shrink:0;}
+  .dot-online{width:9px;height:9px;border-radius:50%; background:#7fae8e; box-shadow:0 0 0 3px rgba(127,174,142,.25);}
+  .chat-title{font-family:"Noto Serif SC",serif; font-weight:600; color:var(--ink); font-size:15.5px;}
+  .chat-sub{margin-left:auto; font-size:12px; color:var(--ink-soft); font-weight:300;}
+
+  .chat-msg{flex:1; overflow-y:auto; min-height:80px; padding:18px 16px; display:flex; flex-direction:column; gap:14px; background:radial-gradient(circle at 20% 0%, rgba(255,255,255,.35), transparent 60%);}
+
+  .msg{display:flex; gap:10px; align-items:flex-end; max-width:100%;}
+  .msg.user{justify-content:flex-end;}
+  .msg.advisor{justify-content:flex-start;}
+
+  .avatar{flex:0 0 auto; width:32px;height:32px;border-radius:50%; background:linear-gradient(135deg,#9bb3aa,#7e9a90); color:#fff; font-weight:700; font-size:14px; display:grid; place-items:center; font-family:"Noto Serif SC",serif; box-shadow:0 4px 10px -4px rgba(90,80,70,.5);}
+
+  .bubble{max-width:80%; padding:11px 15px; border-radius:18px; font-size:14.5px; line-height:1.7; box-shadow:0 8px 20px -14px rgba(90,80,70,.5); word-break:break-word;}
+  .user-bubble{background:linear-gradient(135deg,#b9a7c4,#9aa9bd); color:#fff; border-bottom-right-radius:5px;}
+  .advisor-bubble{background:var(--glass-strong); border:1px solid var(--line); color:var(--ink-soft); border-bottom-left-radius:5px;}
+  .advisor-bubble b{color:var(--ink); font-weight:600;}
+
+  .ans-meta{font-size:11.5px; color:#9c8f86; margin-bottom:4px; letter-spacing:.02em;}
+  .ans-q{font-weight:600; color:var(--ink); margin-bottom:5px;}
+  .ans-a{font-weight:300;}
+
+  .chips{display:flex; gap:8px; flex-wrap:wrap; padding:10px 16px 0; border-top:1px solid var(--line); background:var(--glass); flex-shrink:0; max-height:74px; overflow-y:auto; position:relative;}
+  .chip{font-family:inherit; font-size:12.5px; padding:6px 13px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.5); color:var(--ink-soft); cursor:pointer; transition:.2s;}
+  .chip:hover{background:linear-gradient(135deg,#9bb3aa,#7e9a90); color:#fff; border-color:transparent;}
+  .chips-label{font-size:12px; color:var(--ink-soft); opacity:.85; padding:10px 16px 0; background:var(--glass); letter-spacing:.06em; display:flex; align-items:center; gap:6px; flex-shrink:0;}
+  .chips-label::before{content:''; width:3px; height:12px; border-radius:2px; background:linear-gradient(135deg,#9bb3aa,#7e9a90); display:inline-block;}
+
+  /* 滚动条默认隐藏，hover/触碰时出现 */
+  .chat-msg::-webkit-scrollbar,.chips::-webkit-scrollbar{width:6px;}
+  .chat-msg::-webkit-scrollbar-track,.chips::-webkit-scrollbar-track{background:transparent;}
+  .chat-msg::-webkit-scrollbar-thumb,.chips::-webkit-scrollbar-thumb{background:transparent; border-radius:3px;}
+  .chat-msg:hover::-webkit-scrollbar-thumb,.chips:hover::-webkit-scrollbar-thumb,
+  .chat-msg.touch-active::-webkit-scrollbar-thumb,.chips.touch-active::-webkit-scrollbar-thumb{background:rgba(120,110,100,.35);}
+  .chat-msg,.chips{scrollbar-width:thin; scrollbar-color:transparent transparent;}
+  .chat-msg:hover,.chips:hover,.chat-msg.touch-active,.chips.touch-active{scrollbar-color:rgba(120,110,100,.35) transparent;}
+
+  .chat-bar{display:flex; gap:12px; align-items:center; min-height:74px; padding:14px 18px 20px; border-top:1px solid var(--line); background:var(--glass); position:relative; z-index:1; flex-shrink:0;}
+  .chat-bar textarea{flex:1; resize:none; font-family:inherit; font-size:14.5px; line-height:1.55; color:var(--ink); padding:13px 16px; border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,.6); min-height:50px; max-height:120px; outline:none;}
+  .chat-bar textarea:focus{border-color:#9bb3aa; box-shadow:0 0 0 3px rgba(155,179,170,.2);}
+  .send-btn{flex:0 0 auto; padding:13px 24px; border-radius:18px; border:none; background:linear-gradient(135deg,#9bb3aa,#7e9a90); color:#fff; font-family:inherit; font-size:15px; font-weight:500; cursor:pointer; box-shadow:0 6px 16px -8px rgba(90,80,70,.55); transition:.2s;}
+  .send-btn:hover{filter:brightness(1.05);}
+  .send-btn:active{transform:translateY(1px);}
+
+  /* 无障碍：晕动症用户关闭所有过渡动画 */
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; animation:none !important;}
+  }
+
   @media (max-width:560px){
     h1{font-size:25px;}
     .m-title h2{font-size:18px;}
-    .wrap{padding:18px 12px 70px;}
-    .a-body{padding-left:30px;}
+    .wrap{padding:18px 12px 0;}
+    .a-body{padding:2px 0 0;}
     .lib-name{min-width:76px; font-size:13.5px; max-width:44%;}
     .lib-desc{font-size:13px;}
     .cat-img{max-height:170px;}
+    .chat-card{min-height:300px; max-height:calc(100vh - 130px); padding-bottom:10px; border-bottom:12px solid rgba(247,243,238,0.85); box-sizing:border-box;}
+    .chat-msg{min-height:60px;}
+    .bubble{max-width:86%;}
+    .chat-head{padding:11px 14px;}
+    .chat-msg{padding:14px 12px;}
+    .chips{padding:8px 12px 0; max-height:68px; gap:6px;}
+    .chip{font-size:12px; padding:5px 11px;}
+    .chips-label{padding:8px 12px 0; font-size:11.5px;}
+    .chat-bar{align-items:center; min-height:68px; padding:12px 14px 16px; gap:10px; position:relative; z-index:1;}
+    .chat-bar textarea{padding:11px 14px; min-height:46px; border-radius:16px;}
+    .send-btn{padding:11px 20px; border-radius:16px; font-size:14.5px;}
   }
 </style>
 </head>
@@ -180,6 +262,30 @@
     <div class="hero-note">本库为健康生活方式科普，不提供医疗诊断与治疗建议；涉及就医的情形已明确标注「建议就医」。</div>
   </header>
 
+  <div id="chatView">
+    <div class="chat-card">
+      <div class="chat-head">
+        <span class="dot-online"></span>
+        <span class="chat-title">健康顾问</span>
+        <span class="chat-sub">基于 Q&amp;A 库为你答疑</span>
+      </div>
+      <div class="chat-msg" id="chatMsg"></div>
+      <div class="chips-label">猜你想问</div>
+      <div class="chips" id="chips">
+        <button class="chip" type="button">潮热盗汗怎么办</button>
+        <button class="chip" type="button">晚上睡不着</button>
+        <button class="chip" type="button">脸上长斑怎么改善</button>
+        <button class="chip" type="button">想增肌减脂</button>
+        <button class="chip" type="button">情绪总焦虑</button>
+      </div>
+      <div class="chat-bar">
+        <textarea id="chatInput" rows="1" placeholder="描述你的困扰，例如：最近总是睡不着…"></textarea>
+        <button class="send-btn" id="chatSend" type="button">发送</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="libraryView">
   <div class="search">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
     <input id="search" type="text" placeholder="搜索你关心的问题，例如：潮热、失眠、胶原蛋白、力量训练…" />
@@ -708,6 +814,7 @@
 
         <div class="cat">
           <div class="cat-title"><span class="dot" style="background:var(--olive)"></span><span class="tag" style="background:var(--olive)">主食 · 全谷物与薯类</span></div>
+          <div class="lib-item"><span class="lib-name">杂粮饭</span><span class="lib-desc">全谷物如燕麦、黑米、红米、红豆、绿豆等，按 <b>1:3</b> 的比例与白米混合，是一款稳血糖、饱腹感强的健康主食。</span></div>
           <img class="cat-img" alt="主食·全谷物与薯类 水彩" src="assets/img1.png">
           <div class="lib-item"><span class="lib-name">燕麦</span><span class="lib-desc">富含 <b>β-葡聚糖</b> 可溶性纤维，稳血糖、扛饿，早餐友好（东西方通用）。</span></div>
           <div class="lib-item"><span class="lib-name">糙米</span><span class="lib-desc">保留麸皮胚芽，<b>B 族维生素</b>与膳食纤维高于白米，低 GI。</span></div>
@@ -724,15 +831,16 @@
         <div class="cat">
           <div class="cat-title"><span class="dot" style="background:var(--rose)"></span><span class="tag" style="background:var(--rose)">蛋白质 · 海陆兼修</span></div>
           <img class="cat-img" alt="蛋白质·海陆兼修 水彩" src="assets/img2.png">
-          <div class="lib-item"><span class="lib-name">三文鱼 / 沙丁鱼</span><span class="lib-desc">地中海核心，富含 <b>Omega-3</b> 抗炎、护心脑。</span></div>
-          <div class="lib-item"><span class="lib-name">虾 / 鱼类</span><span class="lib-desc">优质低脂蛋白，易吸收，补微量元素。</span></div>
+          <div class="lib-item"><span class="lib-name">海水鱼 / 淡水鱼 · 优选</span><span class="lib-desc">鱼类是优质低脂蛋白来源，富含 DHA、EPA 与多种微量元素。<br><b>深海/海水鱼：</b>三文鱼、沙丁鱼、金枪鱼、带鱼、黄花鱼、鲈鱼、鳕鱼、秋刀鱼等，Omega-3 丰富，抗炎护心脑；<br><b>常见淡水鱼：</b>鲫鱼、草鱼、鲤鱼、黑鱼、鳜鱼、罗非鱼等，肉质细嫩、易获取，清蒸炖煮皆宜。建议每周吃鱼 2–3 次，每次 100–150 g。</span></div>
+          <div class="lib-item"><span class="lib-name">虾类（基围虾 / 对虾 / 皮皮虾 / 小龙虾）</span><span class="lib-desc">低脂高蛋白、易消化，富含硒、锌、碘等微量元素。<br><b>常见虾类：</b>基围虾、对虾、明虾、河虾、海白虾、皮皮虾、小龙虾、阿根廷红虾、黑虎虾、北极甜虾等；虾肉适合减脂期、老人与儿童。建议新鲜烹煮，过敏体质慎食。</span></div>
           <div class="lib-item"><span class="lib-name">鸡蛋</span><span class="lib-desc">高生物价蛋白，性价比之王，每天 1 个无负担。</span></div>
           <div class="lib-item"><span class="lib-name">豆制品（豆腐/豆浆/纳豆）</span><span class="lib-desc">东方膳食核心，植物蛋白 + <b>大豆异黄酮</b>，对女性友好。</span></div>
-          <div class="lib-item"><span class="lib-name">瘦肉（鸡胸 / 牛肉）</span><span class="lib-desc">补铁补蛋白，预防贫血与肌肉流失。</span></div>
+          <div class="lib-item"><span class="lib-name">瘦肉（白肉 / 红肉）</span><span class="lib-desc">优质蛋白 + 血红素铁，预防贫血与肌肉流失。<br><b>白肉类：</b>去皮鸡鸭鹅肉，脂肪更低、更易消化，适合日常多选；<br><b>红肉类：</b>瘦猪肉、牛肉、羊肉等，补铁补血效果好，但注意控制总量、少油少盐烹调，每周 300–500 g 为宜。</span></div>
+          <div class="lib-item"><span class="lib-name">高热量肉类（尽量少吃）</span><span class="lib-desc">脂肪与热量偏高，减脂 / 控重期建议尽量少吃、浅尝辄止。<br><b>常见高热量部位：</b>猪五花、排骨、猪蹄、肥牛、肥羊、牛腩、牛腩筋、红烧肉、午餐肉、培根、香肠等。<br><b>动物内脏类：</b>猪肝、猪肚、猪大肠、猪腰、猪脑、鸡心、鸡肝、鸭肠、牛肚、羊杂等，通常<b>胆固醇和嘌呤较高</b>，血脂异常、高尿酸、痛风人群尤其要少吃，健康人群也建议每月不超过 1–2 次、每次一小份。<br>这类食物饱和脂肪/胆固醇较多，吃多了易增重、升高血脂和尿酸；如偶尔想吃，建议选瘦肉多、去皮去肥的切法，并控制在一小份、搭配蔬菜与全谷物平衡。</span></div>
           <div class="lib-item"><span class="lib-name">无糖酸奶 / 希腊酸奶</span><span class="lib-desc">益生菌 + 钙，护肠又护骨。</span></div>
           <div class="lib-item"><span class="lib-name">坚果种子（核桃/杏仁/芝麻/奇亚籽）</span><span class="lib-desc">好脂肪 + 维 E，每日一小把即可。</span></div>
           <div class="lib-item"><span class="lib-name">奶酪（适量）</span><span class="lib-desc">地中海常用补钙食物，选天然发酵、少盐款。</span></div>
-          <div class="lib-item"><span class="lib-name">小鱼小虾 / 贝类</span><span class="lib-desc">连骨吃可补钙，富锌硒。</span></div>
+          <div class="lib-item"><span class="lib-name">贝类（扇贝 / 蛤蜊 / 牡蛎 / 鲍鱼）</span><span class="lib-desc">优质蛋白 + 锌、硒、铁，尤其牡蛎含锌量高。<br><b>常见贝类：</b>蛤蜊、花甲、牡蛎、生蚝、扇贝、贻贝、青口贝、海螺、鲍鱼、蛏子、蚬子、蚌等。建议彻底加热后食用，痛风或高尿酸人群控制频次。</span></div>
         </div>
 
         <div class="cat">
@@ -748,6 +856,16 @@
           <div class="lib-item"><span class="lib-name">茄子</span><span class="lib-desc">地中海常见，少油清蒸 / 烤制更健康。</span></div>
           <div class="lib-item"><span class="lib-name">海藻（海带/紫菜/裙带菜）</span><span class="lib-desc">东方膳食特色，富碘与褐藻多糖，凉拌做汤皆宜。</span></div>
           <div class="lib-item"><span class="lib-name">黄瓜 / 冬瓜</span><span class="lib-desc">高水分、低热量，清热利水，减脂期友好。</span></div>
+        </div>
+
+        <div class="cat">
+          <div class="cat-title"><span class="dot" style="background:var(--coral)"></span><span class="tag" style="background:var(--coral)">水果 · 择优控量</span></div>
+          <div class="lib-item"><span class="lib-name">低 GI/GL 水果</span><span class="lib-desc">苹果、梨、柚子、草莓、蓝莓、樱桃、猕猴桃、李子、西梅、番石榴、橙子（带白络）、葡萄柚。升糖慢、血糖波动小，减脂/控糖/更年期更友好。</span></div>
+          <div class="lib-item"><span class="lib-name">低热量水果</span><span class="lib-desc">西瓜、木瓜、哈密瓜、草莓、西柚、杨桃、杨梅、枇杷、柚子。水分高、热量低，减脂期可作为加餐，但每次 100–150 g 为宜。</span></div>
+          <div class="lib-item"><span class="lib-name">高纤维 / 助排便水果</span><span class="lib-desc">火龙果、猕猴桃、西梅、梨、苹果（带皮）、番石榴、无花果。膳食纤维或山梨醇丰富，有助于肠道规律蠕动。</span></div>
+          <div class="lib-item"><span class="lib-name">抗氧化 / 维 C 水果</span><span class="lib-desc">蓝莓、草莓、猕猴桃、橙子、柠檬、柑橘、番石榴、火龙果（红心）、桑葚、杨梅。花青素、维 C、番茄红素等抗氧化成分丰富，有助皮肤与气色。</span></div>
+          <div class="lib-item"><span class="lib-name">热带 / 中高糖水果（控量吃）</span><span class="lib-desc">香蕉、芒果、菠萝、榴莲、荔枝、龙眼、山竹、释迦。口感好但糖分/热量偏高，建议放在运动后或早餐，每次不超过一小份。</span></div>
+          <div class="lib-item"><span class="lib-name">每日水果建议</span><span class="lib-desc">《中国居民膳食指南》推荐成人每天 200–350 g 新鲜水果，约一个拳头大小；优先选低 GI、高纤维品种，果汁不能替代完整水果。</span></div>
         </div>
 
         <div class="module-sources"><b>模块参考资料：</b>腾讯医典《抗衰老的食物有哪些》《地中海饮食是什么》；ima知识库·营养百科（《中国居民膳食指南2022》《中国营养科学全书》）；东方膳食模式（全谷物、豆制品、薯类、菌藻）相关科普。</div>
@@ -808,6 +926,10 @@
         <div class="cat">
           <div class="cat-title"><span class="dot" style="background:var(--blue)"></span><span class="tag" style="background:var(--blue)">中等强度有氧运动</span></div>
           <img class="cat-img" alt="中等强度有氧 水彩" src="assets/img5.png">
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">有氧运动是什么？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body"><b>定义：</b>有氧运动是指人体在氧气供应充分的情况下，持续、有节奏地进行的大肌群运动，特点是强度中等、可持续较长时间，能有效锻炼心肺功能并消耗脂肪。<br><b>常见例子：</b>快走、慢跑、游泳、骑自行车、跳绳、椭圆机、划船机、健身操、跳舞、爬山等。<br><b>判断标准：</b>运动时能说话但略喘，心率大致在（220－年龄）×60%～75% 的范围；每次建议 30 分钟以上，每周累计 150 分钟以上。<br><b>注意事项：</b>运动前热身、运动后拉伸；关节不适可选游泳、骑车等低冲击项目；出现胸闷、头晕、心悸应立即停止。</div></div></div>
+          </div>
           <div class="qa">
             <button class="q"><span class="qmark">Q</span><span class="qtext">快走怎么练？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
             <div class="a"><div class="ainner"><div class="a-body"><b>动作要点：</b>步伐轻快，配速以「能说话但略喘」为宜；挺胸摆臂，每次 30 分钟以上。<br><b>注意事项：</b>穿缓冲好、合脚的鞋；膝踝痛改游泳；胸闷头晕即停。</div></div></div>
@@ -953,6 +1075,7 @@
       <b>免责声明：</b>本库仅作健康科普与生活方式参考，<b>不构成任何医疗诊断、治疗建议或替代专业诊疗</b>。每个人的身体状况不同，出现不适应及时前往正规医疗机构就诊；涉及用药、激素治疗、医美、长期失眠/情绪问题等，请遵循医生或专业人士指导。文中标注「建议就医」的情形，均请优先咨询专业医生。
     </div>
   </footer>
+  </div><!-- /libraryView -->
 </div>
 
 <script>
@@ -995,26 +1118,33 @@
 
   // ====== 同义词 / 近义词归一表（搜索时自动扩展）======
   var SYN = [
-    ['力量训练','抗阻','抗阻运动','阻力训练','负重','负重训练','力量','训练','撸铁'],
-    ['减脂','减肥','瘦身','减重','燃脂','掉秤','体脂','瘦下来'],
-    ['增肌','肌肉','肌力','塑形','紧致','线条'],
-    ['睡眠','失眠','睡不着','入睡困难','入睡难','睡不好','安眠','易醒','多梦','睡眠质量','早醒'],
-    ['更年期','绝经','围绝经期','更年','绝经后'],
-    ['抗衰老','抗老','抗衰','年轻化','逆龄','抗老化'],
-    ['焦虑','紧张','压力大','不安','焦躁','烦躁'],
-    ['情绪','心情','心理状态','情志','心态'],
-    ['抑郁','低落','消沉','忧郁','丧'],
-    ['生理期','经期','月经','大姨妈','例假','姨妈'],
-    ['有氧','有氧运动','心肺运动','心肺','有氧锻炼','有氧训练'],
-    ['瑜伽','身心运动','冥想','正念'],
-    ['地中海','地中海饮食'],
-    ['食材','食物','饮食','营养','吃啥','吃什么'],
-    ['皮肤','肌肤','肤质','护肤'],
-    ['气色','润颜','焕活','抗氧','抗氧化','好气色'],
-    ['胶原蛋白','胶原'],
-    ['色斑','长斑','斑点','色素沉着','色素沉淀'],
-    ['肌肉酸痛','酸痛','延迟性酸痛','DOMS','运动后酸痛'],
-    ['代谢','代谢慢','新陈代谢','基础代谢']
+    ['力量训练','抗阻','抗阻运动','抗阻训练','阻力训练','负重','负重训练','力量','撸铁','练肌肉','练力量','举铁','器械'],
+    ['减脂','减肥','瘦身','减重','燃脂','掉秤','体脂','瘦下来','想瘦','瘦肚子','瘦腿','减肚子','减体重','掉肉'],
+    ['增肌','肌肉','肌力','塑形','紧致','线条','长肌肉','练肌肉','增力量','壮一点','结实'],
+    ['睡眠','失眠','睡不着','入睡困难','入睡难','睡不好','安眠','易醒','多梦','睡眠质量','早醒','睡不好觉','睡不醒','难入睡','入睡慢','半夜醒','醒得早','辗转反侧'],
+    ['更年期','绝经','围绝经期','更年','绝经后','潮热','盗汗','烘热','突然出汗','出汗','夜里出汗','夜间出汗','冒汗','发汗','燥热','一阵热','发热','脸红','烘热汗出'],
+    ['抗衰老','抗老','抗衰','年轻化','逆龄','抗老化','显老','老了','延缓衰老','保养','年轻','冻龄'],
+    ['焦虑','紧张','压力大','不安','焦躁','烦躁','心慌','心里慌','坐立不安','紧张不安','心神不宁'],
+    ['情绪','心情','心理状态','情志','心态','情绪不好','情绪差','心情不好','不开心','心烦'],
+    ['抑郁','低落','消沉','忧郁','丧','不开心','没精神','没兴趣','提不起劲','心情差'],
+    ['生理期','经期','月经','大姨妈','例假','姨妈','来姨妈','来月经','来事','来例假','大姨妈来了'],
+    ['有氧','有氧运动','心肺运动','心肺','有氧锻炼','有氧训练','跑步','慢跑','快走','游泳','骑车','心肺训练'],
+    ['瑜伽','身心运动','冥想','正念','打坐','静心','放松训练','呼吸练习'],
+    ['地中海','地中海饮食','地中海式','健康饮食','清淡饮食','橄榄油'],
+    ['食材','食物','饮食','营养','吃啥','吃什么','吃','喝','食谱','菜谱','饮食搭配'],
+    ['主食','碳水','碳水化合物','米饭','糙米','燕麦','全麦','杂粮','谷物','藜麦','红薯','紫薯','土豆','玉米','小米','荞麦','意面','意大利面','全麦面包','面食','馒头','面条','粗粮','细粮','全谷物','薯类','杂粮饭','杂粮米饭','五谷饭'],
+    ['蛋白质','肉','瘦肉','白肉','红肉','鸡胸','鸡胸肉','鸡肉','鸭肉','鹅肉','鸡鸭鹅','去皮','牛肉','羊肉','猪肉','瘦猪肉','补蛋白','蛋白','优质蛋白','动物性蛋白','植物蛋白','补铁','补铁补血','补气血','高热量肉类','高脂肉','肥肉','猪五花','五花肉','排骨','猪蹄','肥牛','肥羊','牛腩','红烧肉','午餐肉','培根','香肠','腊肉','内脏','动物内脏','猪内脏','猪肝','猪肚','猪大肠','大肠','猪腰','猪脑','鸡心','鸡肝','鸭肠','牛肚','羊杂','牛杂','下水','胆固醇高','高胆固醇','嘌呤高'],
+    ['海鲜水产','鱼肉','鱼','海水鱼','淡水鱼','深海鱼','三文鱼','沙丁鱼','金枪鱼','带鱼','黄花鱼','鲈鱼','鳕鱼','秋刀鱼','比目鱼','鲷鱼','石斑鱼','多宝鱼','鲫鱼','草鱼','鲤鱼','黑鱼','鳜鱼','罗非鱼','鲢鱼','鳙鱼','武昌鱼','鲮鱼','鲟鱼','鳗鱼','鳝鱼','泥鳅','虾','虾仁','虾皮','小龙虾','基围虾','对虾','明虾','河虾','海白虾','皮皮虾','阿根廷红虾','黑虎虾','北极甜虾','龙虾','海鲜','水产','河鲜','贝类','蛤蜊','花甲','牡蛎','生蚝','扇贝','贻贝','青口贝','海螺','鲍鱼','蛏子','蚬子','蚌','鱿鱼','墨鱼','章鱼','海参','海带','紫菜','海藻','海产'],
+    ['蔬菜','青菜','绿叶菜','叶菜','菠菜','生菜','芹菜','西兰花','花菜','卷心菜','白菜','油菜','油麦菜','芥蓝','空心菜','茼蒿','韭菜','番茄','西红柿','彩椒','胡萝卜','菌菇','木耳','香菇','金针菇','黄瓜','冬瓜','海藻','海带','紫菜','裙带菜','茄子','紫甘蓝','甘蓝','菜花','青菜类','绿叶蔬菜'],
+    ['水果','苹果','香蕉','橙子','柑橘','柠檬','蓝莓','草莓','葡萄','西瓜','梨','桃','猕猴桃','火龙果','西梅','柚子','樱桃','芒果','菠萝','榴莲','荔枝','龙眼','木瓜','哈密瓜','杨梅','枇杷','无花果','桑葚','番石榴','葡萄柚','李子','西柚','杨桃','山竹','释迦','水果捞','果盘','鲜果','果汁','果糖','控糖水果','低糖水果','低gi水果','低gi','升糖慢','热量低','减肥水果','减脂水果'],
+    ['坚果','核桃','杏仁','芝麻','奇亚籽','花生','瓜子','腰果','榛子','坚果种子','种子'],
+    ['皮肤','肌肤','肤质','护肤','脸','脸皮','面部','肤色','暗沉','暗黄'],
+    ['气色','润颜','焕活','抗氧','抗氧化','好气色','面色','脸色','气色差','脸色差','苍白'],
+    ['胶原蛋白','胶原','胶原蛋白流失','皮肤弹性','紧致'],
+    ['色斑','长斑','斑点','色素沉着','色素沉淀','斑','黑斑','黄斑','雀斑','晒斑','黑色素'],
+    ['肌肉酸痛','酸痛','延迟性酸痛','DOMS','运动后酸痛','肌肉痛','肌肉疼','酸痛感','乳酸堆积','练完酸痛'],
+    ['骨痛','骨头痛','骨头疼','关节疼痛','关节不适','关节痛','关节疼','腰酸','腰酸背痛','腰背酸痛','腰疼','腰痛','骨质疏松','骨量流失','易骨折','骨头不舒服','骨头酸胀','骨密度低'],
+    ['代谢','代谢慢','新陈代谢','基础代谢','代谢差','代谢不好','基础代谢低','代谢率']
   ];
   // 将查询词扩展为「同义词集合」：命中任一即视为相关
   function expandTerms(query){
@@ -1022,7 +1152,12 @@
     if(!q) return [];
     var terms = [q];
     SYN.forEach(function(group){
-      var hit = group.some(function(t){ return q.indexOf(t) > -1 || t.indexOf(q) > -1; });
+      var hit = group.some(function(t){
+        if(q.indexOf(t) > -1) return true;
+        // 短查询词（≤2 字）不再被更长的同义词反向包含，避免「肉」误触发「肌肉」
+        if(q.length > 2 && t.indexOf(q) > -1) return true;
+        return false;
+      });
       if(hit){ group.forEach(function(t){ if(terms.indexOf(t) === -1) terms.push(t); }); }
     });
     return terms;
@@ -1110,6 +1245,233 @@
     });
     noResult.style.display = scored.length ? 'none' : 'block';
   });
+
+  // ====== 对话框问答模式 ======
+  var chatMsg = document.getElementById('chatMsg');
+  var chatInput = document.getElementById('chatInput');
+  var chatSend = document.getElementById('chatSend');
+  var chips = document.getElementById('chips');
+
+  function escapeHtml(s){
+    return (s||'').replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  function scrollChat(){
+    requestAnimationFrame(function(){
+      var last = chatMsg.lastElementChild;
+      if(!last){ chatMsg.scrollTop = chatMsg.scrollHeight; return; }
+      // 答案定位：让最新消息顶部处于消息区域约 1/4 高度处，完整可见且不贴底
+      var containerH = chatMsg.clientHeight;
+      var desiredTop = Math.max(16, containerH * 0.22);
+      chatMsg.scrollTop = Math.max(0, last.offsetTop - desiredTop);
+    });
+  }
+
+  function addUserMsg(text){
+    var row = document.createElement('div');
+    row.className = 'msg user';
+    row.innerHTML = '<div class="bubble user-bubble">' + escapeHtml(text) + '</div>';
+    chatMsg.appendChild(row);
+    scrollChat();
+  }
+  function addAdvisorMsg(innerHtml){
+    var row = document.createElement('div');
+    row.className = 'msg advisor';
+    row.innerHTML = '<div class="avatar">A</div><div class="bubble advisor-bubble">' + innerHtml + '</div>';
+    chatMsg.appendChild(row);
+    scrollChat();
+  }
+
+  // 生成「猜你想问」：从各模块取代表问题，跨模块多样、避免扎堆（每模块最多 2 条）
+  function buildGuessList(){
+    var list = [];
+    var seen = {};
+    moduleEls.forEach(function(m){
+      var mh = m.querySelector('.m-title h2');
+      var modName = mh ? mh.textContent.trim() : '';
+      var qes = m.querySelectorAll('.cat .qtext, .lib-item .lib-name');
+      var cnt = 0;
+      qes.forEach(function(qe){
+        if(cnt >= 2) return;
+        var t = qe.textContent.trim();
+        if(seen[t]) return;
+        list.push({text:t, mod:modName});
+        seen[t] = 1; cnt++;
+      });
+    });
+    return list;
+  }
+
+  // 把建议问题渲染到「猜你想问」区域
+  function refreshChips(items){
+    if(!chips) return;
+    chips.innerHTML = '';
+    items.slice(0, 9).forEach(function(it){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip';
+      b.textContent = it.text || it;
+      chips.appendChild(b);
+    });
+  }
+
+  // 从候选池随机抽取 n 条（Fisher–Yates 部分洗牌）
+  function pickRandom(arr, n){
+    var copy = arr.slice();
+    for(var i = copy.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = copy[i]; copy[i] = copy[j]; copy[j] = t;
+    }
+    return copy.slice(0, n);
+  }
+  // 每次随机 3~4 条
+  function randCount(){ return 3 + Math.floor(Math.random() * 2); }
+
+  // 计算 a 的独立字符在 b 中的覆盖比例（用于判断查询与问题是否高度重合）
+  function overlapRatio(a, b){
+    if(!a || !b) return 0;
+    var setB = {};
+    for(var i = 0; i < b.length; i++) setB[b[i]] = true;
+    var found = 0, setA = {};
+    for(var i = 0; i < a.length; i++){
+      if(!setA[a[i]]){ setA[a[i]] = true; if(setB[a[i]]) found++; }
+    }
+    var totalA = Object.keys(setA).length;
+    return totalA ? found / totalA : 0;
+  }
+
+  // 从 Q&A 库中按关键词检索（复用同义词表与匹配函数）
+  function findAnswers(query){
+    var terms = expandTerms(query);
+    if(!terms.length) return [];
+    // 清洗后的原始查询，用于判断「问题是否与查询几乎一致」
+    var rawClean = (query || '').replace(/[？?。，,\s！!：:]+/g, '').toLowerCase();
+    var out = [];
+    moduleEls.forEach(function(m){
+      var mh = m.querySelector('.m-title h2');
+      var modName = mh ? mh.textContent.trim() : '';
+      m.querySelectorAll('.cat').forEach(function(cat){
+        var ct = cat.querySelector('.cat-title') || cat.querySelector('.cat-head');
+        var catName = ct ? ct.textContent.trim() : '';
+        cat.querySelectorAll('.qa, .lib-item').forEach(function(child){
+          var qtEl = child.querySelector('.qtext');
+          var q, aHTML, isLib = false, libDescText = '';
+          if(qtEl){
+            q = qtEl.textContent.trim();
+            var bd = child.querySelector('.a-body');
+            aHTML = bd ? bd.innerHTML : '';
+          } else {
+            isLib = true;
+            var nm = child.querySelector('.lib-name');
+            var descEl = child.querySelector('.lib-desc');
+            q = nm ? nm.textContent.trim() : '';
+            libDescText = descEl ? descEl.textContent.trim() : '';
+            aHTML = child.innerHTML;
+          }
+          // 食材库条目的描述也参与「问题命中」判断，避免用户搜描述中具体食材名时被其他条目覆盖
+          var qHit = matches(q, terms) || (isLib && matches(libDescText, terms));
+          var aHit = matches(aHTML.replace(/<[^>]+>/g, ''), terms);
+          var cHit = matches(catName, terms);
+          var mHit = matches(modName, terms);
+          if(qHit || aHit || cHit || mHit){
+            // 识别「问题与查询几乎一致」：互相包含则给最高权重，确保用户搜原问题时该条置顶；食材库描述中的具体食材名也纳入判断
+            var qClean = (q + (isLib ? ' ' + libDescText : '')).replace(/[？?。，,\s！!：:]+/g, '').toLowerCase();
+            var exactQ = rawClean.length >= 1 && (
+              qClean.indexOf(rawClean) !== -1 ||
+              rawClean.indexOf(qClean) !== -1 ||
+              overlapRatio(rawClean, qClean) >= 0.75
+            );
+            // 加权：问题完全/高度命中 > 模块命中 > 分类命中 > 答案命中
+            var score = (exactQ ? 100 : (qHit ? 40 : 0)) + (mHit ? 30 : 0) + (cHit ? 20 : 0) + (aHit ? 10 : 0);
+            // 命中的关键词越多，相关性越高（加分项）
+            var hay = (q + ' ' + modName + ' ' + catName + ' ' + aHTML).toLowerCase();
+            var matchedCount = 0;
+            for(var ti=0; ti<terms.length; ti++){ if(hay.indexOf(terms[ti]) !== -1) matchedCount++; }
+            score += matchedCount;
+            out.push({mod:modName, cat:catName, q:q, aHTML:aHTML, isLib:isLib, score:score});
+          }
+        });
+      });
+    });
+    out.sort(function(x, y){ return y.score - x.score; });
+    // 严格限制：一次问答只返回最相关的 1 条（已按相关性加权排序，取第 1 名）
+    return out.length ? [out[0]] : [];
+  }
+
+  function renderAnswers(results){
+    if(results.length === 0){
+      addAdvisorMsg('对不起，您的问题尚未检索到相关答案');
+      refreshChips(buildGuessList()); // 无结果时回到默认推荐
+      return;
+    }
+    var shownMods = [];
+    // 每次问答仅最相关的 1 条，无需循环多条
+    var r = results[0];
+    if(shownMods.indexOf(r.mod) === -1) shownMods.push(r.mod);
+    var meta = '<div class="ans-meta">' + escapeHtml(r.mod) + (r.cat ? ' · ' + escapeHtml(r.cat) : '') + '</div>';
+    var qLine = r.isLib
+      ? '<div class="ans-q">食材：' + escapeHtml(r.q) + '</div>'
+      : '<div class="ans-q">问：' + escapeHtml(r.q) + '</div>';
+    var aBody = r.aHTML;
+    // 食材库答案：标题已在 qLine 中展示，正文只取 .lib-desc 避免重复显示分类名
+    if(r.isLib){
+      var tmp = document.createElement('div');
+      tmp.innerHTML = r.aHTML;
+      var descEl = tmp.querySelector('.lib-desc');
+      if(descEl) aBody = descEl.innerHTML;
+    }
+    var aLine = '<div class="ans-a">' + aBody + '</div>';
+    addAdvisorMsg(meta + qLine + aLine);
+    // 根据已展示模块，优先推荐跨模块提问，并随机显示 3~4 条
+    var others = buildGuessList().filter(function(it){ return shownMods.indexOf(it.mod) === -1; });
+    var pool = others.length ? others : buildGuessList();
+    refreshChips(pickRandom(pool, randCount()));
+  }
+
+  function sendQuestion(){
+    var text = chatInput.value.trim();
+    if(!text) return;
+    addUserMsg(text);
+    chatInput.value = '';
+    chatInput.style.height = 'auto';
+    setTimeout(function(){
+      renderAnswers(findAnswers(text));
+    }, 200);
+  }
+
+  chatSend.addEventListener('click', sendQuestion);
+  chatInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendQuestion(); }
+  });
+  chatInput.addEventListener('input', function(){
+    chatInput.style.height = 'auto';
+    chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+  });
+  if(chips){
+    chips.addEventListener('click', function(e){
+      var b = e.target.closest('.chip');
+      if(b){ chatInput.value = b.textContent.trim(); sendQuestion(); }
+    });
+  }
+
+  // 移动端触碰时临时显示滚动条
+  function addTouchScroll(el){
+    if(!el) return;
+    var timer;
+    function show(){ el.classList.add('touch-active'); clearTimeout(timer); }
+    function hide(){ timer = setTimeout(function(){ el.classList.remove('touch-active'); }, 1200); }
+    el.addEventListener('touchstart', show, {passive:true});
+    el.addEventListener('touchend', hide, {passive:true});
+    el.addEventListener('touchcancel', hide, {passive:true});
+  }
+  addTouchScroll(chatMsg);
+  addTouchScroll(chips);
+
+  // 初始欢迎语
+  addAdvisorMsg('你好，我是你的健康生活方式顾问。告诉我你的困扰，我会从问答库里帮你找相关解答；也可以点下面的「猜你想问」试试。');
+  // 初始化「猜你想问」：每次打开随机显示 3~4 条
+  refreshChips(pickRandom(buildGuessList(), randCount()));
 </script>
 </body>
 </html>
