@@ -1554,7 +1554,7 @@
   }
 
   // 后台采集：把每个用户问答上报到后端（命中则返回置顶答案，未命中标记 empty）
-  var BACKEND_URL = 'https://impossible-klein-struct-sends.trycloudflare.com';
+  var BACKEND_URL = 'https://health-qa-backend.pages.dev';
   function reportQuery(q, results){
     try{
       var empty = !results || !results.length;
