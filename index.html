@@ -1208,6 +1208,7 @@
     <p>本库面向女性，聚焦「健康生活方式」改善六大模块问题，内容参考 <b>腾讯医典</b> 官方科普与 <b>ima 知识库</b>（营养百科、减重知识库等），以通俗语言整理，便于日常理解与实践。</p>
     <div class="disclaimer">
       <b>免责声明：</b>本库仅作健康科普与生活方式参考，<b>不构成任何医疗诊断、治疗建议或替代专业诊疗</b>。每个人的身体状况不同，出现不适应及时前往正规医疗机构就诊；涉及用药、激素治疗、医美、长期失眠/情绪问题等，请遵循医生或专业人士指导。文中标注「建议就医」的情形，均请优先咨询专业医生。
+      <br><b>数据说明：</b>为优化内容，后台会匿名记录你的提问内容、访问 IP 与设备标识（匿名 UUID，不可反推真人），仅用于运营统计与命中分析，不作他用。
     </div>
   </footer>
   </div><!-- /libraryView -->
@@ -1595,11 +1596,23 @@
 
   // 后台采集：把每个用户问答上报到后端（命中则返回置顶答案，未命中标记 empty）
   var BACKEND_URL = 'https://health-qa-backend.pages.dev';
+  // 匿名设备 ID：首次访问生成 UUID 存 localStorage，后续复用；不可反推真人
+  function getAnonUid(){
+    try{
+      var k = 'qa_anon_uid';
+      var v = localStorage.getItem(k);
+      if(!v){
+        v = 'u-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+        try{ localStorage.setItem(k, v); }catch(e){}
+      }
+      return v;
+    }catch(e){ return ''; }
+  }
   function reportQuery(q, results){
     try{
       var empty = !results || !results.length;
       var top = empty ? '无结果' : (results[0].q || '');
-      var payload = JSON.stringify({ q: q, a: top, empty: empty, t: Date.now(), ua: navigator.userAgent });
+      var payload = JSON.stringify({ q: q, a: top, empty: empty, t: Date.now(), ua: navigator.userAgent, uid: getAnonUid() });
       // 用 fetch + keepalive：比 sendBeacon 更可靠，能观察错误，且页面关闭时仍可发送
       fetch(BACKEND_URL + '/api/log', {
         method: 'POST',
