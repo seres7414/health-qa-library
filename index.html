@@ -1265,21 +1265,40 @@
     ['色斑','长斑','斑点','色素沉着','色素沉淀','斑','黑斑','黄斑','雀斑','晒斑','黑色素'],
     ['肌肉酸痛','酸痛','延迟性酸痛','DOMS','运动后酸痛','肌肉痛','肌肉疼','酸痛感','乳酸堆积','练完酸痛'],
     ['骨痛','骨头痛','骨头疼','关节疼痛','关节不适','关节痛','关节疼','腰酸','腰酸背痛','腰背酸痛','腰疼','腰痛','骨质疏松','骨量流失','易骨折','骨头不舒服','骨头酸胀','骨密度低'],
-    ['代谢','代谢慢','新陈代谢','基础代谢','代谢差','代谢不好','基础代谢低','代谢率']
+    ['代谢','代谢慢','新陈代谢','基础代谢','代谢差','代谢不好','基础代谢低','代谢率'],
+    ['豆腐','豆制品','豆浆','豆皮','豆干','腐竹','千张','嫩豆腐','老豆腐','内酯豆腐','北豆腐','南豆腐','豆腐脑','纳豆','豆花','香干','素鸡']
   ];
-  // 将查询词扩展为「同义词集合」：命中任一即视为相关
+  // 搜索停用词：无区分度的疑问/助词，避免污染 terms
+  var STOP_WORDS = new Set(['的','是','吗','呢','吧','啊','了','在','有','和','与','或','还','都','也','就','不','没','无','很','太','很','可以','能','会','要','想','该','怎么','怎样','如何','什么','哪些','有没有','吗','呢','吧','呀','么','了','着','过']);
+  // 将查询词扩展为「分词 + 同义词集合」：命中任一即视为相关
   function expandTerms(query){
     var q = (query||'').trim().toLowerCase();
     if(!q) return [];
     var terms = [q];
-    SYN.forEach(function(group){
+    // 1) 简单分词：先按常见分隔符切分，再按 2–4 字滑动取子串（覆盖中文短语）
+    var rawParts = q.split(/[？?。，,\s！!：:\/、（）()【】\[\]\-\|]+/).filter(function(p){ return p.length > 0; });
+    rawParts.forEach(function(part){
+      if(part.length >= 2 && !STOP_WORDS.has(part) && terms.indexOf(part) === -1) terms.push(part);
+      // 滑动窗口取 2–4 字子串，优先覆盖「运动出汗」「皮肤好坏」等短语
+      for(var len=2; len<=4; len++){
+        for(var i=0; i+len<=part.length; i++){
+          var w = part.substr(i, len);
+          if(!STOP_WORDS.has(w) && terms.indexOf(w) === -1) terms.push(w);
+        }
+      }
+    });
+    // 2) 同义词扩展：只要查询或已有分词命中某组，整组加入
+    var expandedGroups = new Set();
+    SYN.forEach(function(group, gi){
+      if(expandedGroups.has(gi)) return;
       var hit = group.some(function(t){
         if(q.indexOf(t) > -1) return true;
         // 短查询词（≤2 字）不再被更长的同义词反向包含，避免「肉」误触发「肌肉」
         if(q.length > 2 && t.indexOf(q) > -1) return true;
-        return false;
+        // 分词命中也触发同义词扩展
+        return terms.some(function(term){ return term.indexOf(t) > -1 || (term.length > 2 && t.indexOf(term) > -1); });
       });
-      if(hit){ group.forEach(function(t){ if(terms.indexOf(t) === -1) terms.push(t); }); }
+      if(hit){ group.forEach(function(t){ if(terms.indexOf(t) === -1) terms.push(t); }); expandedGroups.add(gi); }
     });
     return terms;
   }
@@ -1529,15 +1548,17 @@
               }
             }
             // 加权：问题完全命中 > 食材名精确命中 > 问题命中 > 模块命中 > 分类命中 > 答案命中
-            var score = (exactQ ? 100 : (exactName ? 100 : (qHit ? 40 : 0))) + (mHit ? 30 : 0) + (cHit ? 20 : 0) + (aHit ? 10 : 0);
-            // 命中的关键词越多，相关性越高（加分项）
+            // exactQ / exactName / qHit 三者互斥，避免 mere 关键词命中叠加过高
+            var score = exactQ ? 200 : (exactName ? 150 : (qHit ? 40 : 0));
+            score += (mHit ? 25 : 0) + (cHit ? 15 : 0) + (aHit ? 8 : 0);
+            // 命中的关键词越多，相关性越高（加分项），但上限封顶避免噪音
             var hay = (q + ' ' + modName + ' ' + catName + ' ' + aHTML).toLowerCase();
             var matchedCount = 0;
             for(var ti=0; ti<terms.length; ti++){ if(hay.indexOf(terms[ti]) !== -1) matchedCount++; }
-            score += matchedCount;
-            // 食材库条目可带 data-pri 手动权重（数字越大越靠前），用于在同一分类内做精细排序（如主食逐级递减）
+            score += Math.min(matchedCount, 8);
+            // data-pri 仅作为同分 tie-breaker，避免跨分类压制问题标题命中
             var pri = parseInt(child.getAttribute('data-pri') || '0', 10);
-            if(!isNaN(pri)) score += pri;
+            if(!isNaN(pri)) score += Math.min(pri, 20);
             out.push({mod:modName, cat:catName, q:q, aHTML:aHTML, isLib:isLib, score:score});
           }
         });
