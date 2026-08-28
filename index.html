@@ -1633,6 +1633,21 @@
   var lastQuery = '';
   var lastResultQ = '';
 
+  // 兜底/宽泛查询：没有实质主题词（食材/运动/症状等）时，不应被具体条目标题吞掉
+  function isGenericOnly(query){
+    var q = (query || '').replace(/[？?。，,\s！!：:\/、（）()【】\[\]\-\|]+/g, '');
+    if(!q) return true;
+    // 若包含 SYN 中的任一主题词，则视为有明确主题
+    for(var i=0; i<SYN.length; i++){
+      for(var j=0; j<SYN[i].length; j++){
+        if(q.indexOf(SYN[i][j]) !== -1) return false;
+      }
+    }
+    // 无主题词时，若只含通用疑问/推荐词或很短，视为宽泛兜底
+    var generic = ['推荐','有什么','有哪些','吃什么','喝什么','怎么办','怎么','怎样','如何','哪些','什么','能不能','可以吗','行不行','好吗','吗','呢','吧'];
+    return generic.some(function(g){ return q.indexOf(g) !== -1; }) || q.length <= 4;
+  }
+
   function sendQuestion(){
     var text = chatInput.value.trim();
     if(!text) return;
@@ -1648,6 +1663,16 @@
     var isFollowUp = /这个|它|其他|另外|推荐|有没有|哪些|什么|再|又|还有/.test(text);
     if(lastQuery && isFollowUp && tempTerms.length <= 1){
       effectiveQuery = lastQuery + ' ' + text;
+    }
+
+    // 兜底查询：没有主题词时给引导 + 猜你想问，避免被某个具体条目误命中
+    if(isGenericOnly(effectiveQuery)){
+      setTimeout(function(){
+        addAdvisorMsg('你的问题有点宽泛呢～可以从下面这些方向开始，也可以直接告诉我你的具体困扰，比如「牛奶」「蛋白质」「潮热怎么缓解」。');
+        refreshChips(buildGuessList());
+        reportQuery(text, []);
+      }, 200);
+      return;
     }
 
     // 追问去重：只要判断为承接上文，就默认排除上一轮返回答案，避免重复推荐同一食材/答案
