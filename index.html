@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>健康美丽学习社 Q&A 库 v1 · 35+女性六大模块</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1560,11 +1563,17 @@
       var empty = !results || !results.length;
       var top = empty ? '无结果' : (results[0].q || '');
       var payload = JSON.stringify({ q: q, a: top, empty: empty, t: Date.now(), ua: navigator.userAgent });
-      if(navigator.sendBeacon){
-        navigator.sendBeacon(BACKEND_URL + '/api/log', new Blob([payload], { type: 'application/json' }));
-      } else {
-        fetch(BACKEND_URL + '/api/log', { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: payload }).catch(function(){});
-      }
+      // 用 fetch + keepalive：比 sendBeacon 更可靠，能观察错误，且页面关闭时仍可发送
+      fetch(BACKEND_URL + '/api/log', {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'omit',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+        body: payload
+      }).catch(function(err){
+        // 静默兜底：网络异常时不打断用户对话
+      });
     }catch(e){}
   }
   function renderAnswers(results){
