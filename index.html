@@ -915,6 +915,19 @@
           <div class="lib-item" data-pri="50"><span class="lib-name">坚果种子（核桃/杏仁/芝麻/奇亚籽）</span><span class="lib-desc">好脂肪 + 维 E，每日一小把即可。</span></div>
           <div class="lib-item" data-pri="50"><span class="lib-name">奶酪（适量）</span><span class="lib-desc">地中海常用补钙食物，选天然发酵、少盐款。</span></div>
           <div class="lib-item" data-pri="90"><span class="lib-name">贝类（扇贝 / 蛤蜊 / 牡蛎 / 鲍鱼）</span><span class="lib-desc">优质蛋白 + 锌、硒、铁，尤其牡蛎含锌量高。<br><b>常见贝类：</b>蛤蜊、花甲、牡蛎、生蚝、扇贝、贻贝、青口贝、海螺、鲍鱼、蛏子、蚬子、蚌等。建议彻底加热后食用，痛风或高尿酸人群控制频次。</span></div>
+
+          <div class="qa" id="qa-protein-more">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">地中海饮食推荐的蛋白质有哪些？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">
+              地中海饮食强调「优质、多样、低脂蛋白」并重，日常可以这样搭：
+              <br><b>1. 鱼虾贝类：</b>三文鱼、沙丁鱼、鲈鱼、带鱼、基围虾、蛤蜊、牡蛎等，富含 Omega-3 与微量元素，建议每周吃鱼 2–3 次。
+              <br><b>2. 蛋类：</b>鸡蛋是高生物价蛋白，每天 1 个基本无负担。
+              <br><b>3. 豆制品：</b>豆腐、豆浆、纳豆等，植物蛋白 + 大豆异黄酮，对女性尤其友好。
+              <br><b>4. 瘦肉：</b>去皮鸡鸭鹅、瘦猪牛羊肉，补优质蛋白与铁，每周约 300–500 g 为宜。
+              <br><b>5. 奶制品：</b>牛奶 / 鲜奶、无糖酸奶、希腊酸奶、天然奶酪，补钙又补蛋白。
+              <br>这样海陆搭配、动植物互补，既满足蛋白需求，又兼顾心脑与骨骼健康；想了解某一种，可以直接问我，比如「三文鱼能不能吃」「豆腐可以吗」。
+            </div></div></div>
+          </div>
         </div>
 
         <div class="cat">
@@ -1663,6 +1676,26 @@
     var isFollowUp = /这个|它|其他|另外|推荐|有没有|哪些|什么|再|又|还有/.test(text);
     if(lastQuery && isFollowUp && tempTerms.length <= 1){
       effectiveQuery = lastQuery + ' ' + text;
+    }
+
+    // 蛋白质类追问：上一轮主题为蛋白质，本轮问「有什么/还有哪些/其他/另外/再 推荐」时，直接返回蛋白质推荐总览
+    var isProteinTopicPrev = lastQuery && /蛋白质/.test(lastQuery);
+    var isRecAskNow = /(推荐|还有什么|有哪些|有什么|其他|另外|还有|分别|都)/.test(text);
+    if(isProteinTopicPrev && isRecAskNow){
+      var proMoreEl = document.getElementById('qa-protein-more');
+      if(proMoreEl){
+        var proQ = proMoreEl.querySelector('.qtext').textContent.trim();
+        var proA = proMoreEl.querySelector('.a-body').innerHTML;
+        var proCatEl = proMoreEl.closest('.cat');
+        var proCat = proCatEl ? proCatEl.querySelector('.cat-title').textContent.trim() : '蛋白质 · 海陆兼修';
+        var proResult = {mod:'地中海食材大全', cat:proCat, q:proQ, aHTML:proA, isLib:false, score:999};
+        setTimeout(function(){
+          lastResultQ = proQ;
+          lastQuery = text;
+          renderAnswers([proResult]); reportQuery(text, [proResult]);
+        }, 200);
+        return;
+      }
     }
 
     // 兜底查询：没有主题词时给引导 + 猜你想问，避免被某个具体条目误命中
