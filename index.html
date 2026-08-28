@@ -307,7 +307,7 @@
 
         <div class="cat">
           <div class="cat-title"><span class="dot" style="background:var(--sage)"></span><span class="tag" style="background:var(--sage)">推荐运动类型</span></div>
-          <div class="qa">
+          <div class="qa" id="qa-sports-intro">
             <button class="q"><span class="qmark">Q</span><span class="qtext">女性适合哪些运动来抗老？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
             <div class="a"><div class="ainner"><div class="a-body">
               建议把三类运动搭配起来：<b>有氧运动</b>（快走、游泳、骑车）改善心肺与代谢；<b>力量训练</b>（哑铃、弹力带、自重训练）维持肌肉与骨量，延缓「垮」；<b>柔韧舒缓</b>（瑜伽、太极、拉伸）缓解僵硬、放松神经。每周 3–5 次、每次 30 分钟以上，比偶尔猛练更见效。
@@ -1281,7 +1281,8 @@
     ['骨痛','骨头痛','骨头疼','关节疼痛','关节不适','关节痛','关节疼','腰酸','腰酸背痛','腰背酸痛','腰疼','腰痛','骨质疏松','骨量流失','易骨折','骨头不舒服','骨头酸胀','骨密度低'],
     ['代谢','代谢慢','新陈代谢','基础代谢','代谢差','代谢不好','基础代谢低','代谢率'],
     ['豆腐','豆制品','豆浆','豆皮','豆干','腐竹','千张','嫩豆腐','老豆腐','内酯豆腐','北豆腐','南豆腐','豆腐脑','纳豆','豆花','香干','素鸡'],
-    ['牛奶','奶','鲜奶','纯牛奶','脱脂奶','全脂奶','低脂奶','高钙奶','酸奶','希腊酸奶','无糖酸奶','奶酪','芝士','奶油','黄油','炼乳','奶粉','奶昔','乳清蛋白','酪蛋白','乳糖','乳制品','奶制品','牛乳']
+    ['牛奶','奶','鲜奶','纯牛奶','脱脂奶','全脂奶','低脂奶','高钙奶','酸奶','希腊酸奶','无糖酸奶','奶酪','芝士','奶油','黄油','炼乳','奶粉','奶昔','乳清蛋白','酪蛋白','乳糖','乳制品','奶制品','牛乳'],
+    ['运动','锻炼','健身','身体活动','活动','训练','练','练身体','健身运动']
   ];
   // 搜索停用词：无区分度的疑问/助词，避免污染 terms
   var STOP_WORDS = new Set(['的','是','吗','呢','吧','啊','了','在','有','和','与','或','还','都','也','就','不','没','无','很','太','很','可以','能','会','要','想','该','怎么','怎样','如何','什么','哪些','有没有','吗','呢','吧','呀','么','了','着','过']);
@@ -1693,6 +1694,26 @@
           lastResultQ = proQ;
           lastQuery = text;
           renderAnswers([proResult]); reportQuery(text, [proResult]);
+        }, 200);
+        return;
+      }
+    }
+
+    // 运动/健身类概括询问：直接返回运动总览
+    var isSportsTopicNow = /^(运动|锻炼|健身|训练|活动|练身体)(推荐|有哪些|有什么|是什么|吗|呢|？|\?)?$/.test(effectiveQuery) ||
+                           /(运动|锻炼|健身)(推荐|有哪些|有什么)/.test(effectiveQuery);
+    if(isSportsTopicNow){
+      var sportsIntroEl = document.getElementById('qa-sports-intro');
+      if(sportsIntroEl){
+        var sportsQ = sportsIntroEl.querySelector('.qtext').textContent.trim();
+        var sportsA = sportsIntroEl.querySelector('.a-body').innerHTML;
+        var sportsCatEl = sportsIntroEl.closest('.cat');
+        var sportsCat = sportsCatEl ? sportsCatEl.querySelector('.cat-title').textContent.trim() : '推荐运动类型';
+        var sportsResult = {mod:'抗老营养与生活方式', cat:sportsCat, q:sportsQ, aHTML:sportsA, isLib:false, score:999};
+        setTimeout(function(){
+          lastResultQ = sportsQ;
+          lastQuery = text;
+          renderAnswers([sportsResult]); reportQuery(text, [sportsResult]);
         }, 200);
         return;
       }
