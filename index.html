@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>健康美丽学习社 Q&A 库 v1 · 35+女性六大模块</title>
+<title>更年健康小助手 · 围绝经期相关问题</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
@@ -177,6 +177,8 @@
   }
   .lib-desc{flex:1; font-size:13.5px; color:var(--ink-soft); font-weight:300; line-height:1.65;}
   .lib-desc b{color:var(--ink); font-weight:500;}
+  /* 食材库条目的引用标注：在 flex 容器内占满整行、单独成段 */
+  .lib-item .src{flex-basis:100%; margin-top:6px;}
   .cat-img{display:block; width:100%; height:auto; border-radius:16px; margin:10px 0 6px; border:1px solid var(--line); box-shadow:0 6px 18px -10px rgba(90,80,70,.35); max-height:240px; object-fit:cover;}
 
   /* ====== 对话框问答模式 ====== */
@@ -261,8 +263,8 @@
 <div class="wrap">
   <header class="hero">
     <p class="eyebrow">HEALTH &amp; BEAUTY · 学习社</p>
-    <h1>健康美丽学习社 Q&amp;A 库 v1</h1>
-    <p class="sub">用健康生活方式改善六大模块问题</p>
+    <h1>更年健康小助手</h1>
+    <p class="sub">提供围绝经期健康问题的生活化解决方法</p>
     <div class="hero-note">本库为健康生活方式科普，不提供医疗诊断与治疗建议；涉及就医的情形已明确标注「建议就医」。</div>
   </header>
 
@@ -313,7 +315,6 @@
             <div class="a"><div class="ainner"><div class="a-body">
               建议把三类运动搭配起来：<b>有氧运动</b>（快走、游泳、骑车）改善心肺与代谢；<b>力量训练</b>（哑铃、弹力带、自重训练）维持肌肉与骨量，延缓「垮」；<b>柔韧舒缓</b>（瑜伽、太极、拉伸）缓解僵硬、放松神经。每周 3–5 次、每次 30 分钟以上，比偶尔猛练更见效。
               <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>若运动中出现胸闷、头晕、关节剧痛，或本身有心血管/骨关节基础病，请先咨询医生再制定运动处方。</span></div>
-              <div class="src"><span>腾讯医典</span><span>ima知识库·营养百科</span>来源：《女人35岁以后如何保养更年轻》</div>
             </div></div></div>
           </div>
         </div>
@@ -323,8 +324,20 @@
           <div class="qa">
             <button class="q"><span class="qmark">Q</span><span class="qtext">哪些食物抗氧化、帮着延缓衰老？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
             <div class="a"><div class="ainner"><div class="a-body">
-              多亲近「地中海式」食材：<b>深绿色蔬菜</b>（菠菜、西兰花）、<b>彩色果蔬</b>（番茄、蓝莓、柑橘）、<b>全谷物</b>（燕麦、糙米）、<b>坚果种子</b>（核桃、芝麻、开心果，补维生素E）、<b>深海鱼</b>（三文鱼、沙丁鱼，含 Omega-3）、<b>豆制品</b>与无糖酸奶。这类饮食被营养学界视为健康膳食模式，能减少体内氧化与炎症，起到<b>抗氧化</b>、延缓衰老的作用。<br>尽量少吃：油炸、烧烤、腌制、过度加工食品，以及奶茶蛋糕等高糖高 GI 食物——它们会加速「糖化」，让皮肤发黄、长纹。
-              <div class="src"><span>腾讯医典</span><span>ima知识库·营养百科</span>来源：《抗衰老的食物有哪些》《想要老得慢？做好这4件事》</div>
+              多亲近「地中海式」食材：<b>深绿色蔬菜</b>（菠菜、西兰花）、<b>彩色果蔬</b>（番茄、蓝莓、柑橘）、<b>全谷物</b>（燕麦、糙米）、<b>坚果种子</b>（核桃、芝麻、开心果，补维生素E）、<b>深海鱼</b>（三文鱼、沙丁鱼，含 Omega-3）、<b>豆制品</b>与无糖酸奶。这类饮食被营养学界视为健康膳食模式，能减少体内氧化与炎症，起到<b>抗氧化</b>、延缓衰老的作用。              <br>尽量少吃：油炸、烧烤、腌制、过度加工食品，以及奶茶蛋糕等高糖高 GI 食物——它们会加速「糖化」，让皮肤发黄、长纹。
+            </div></div></div>
+          </div>
+
+          <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">平时多吃什么，能帮着抗衰老？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">
+              抗老没有「神食」，关键是把几类对路的食材常吃、搭配好：<br>
+              <b>① 抗氧化物丰富的果蔬：</b>深绿叶菜、番茄、蓝莓、柑橘、彩椒——维生素 C/E 与多酚帮身体对抗自由基，减缓氧化。<br>
+              <b>② 优质蛋白：</b>鱼、蛋、豆制品、去皮禽肉，提供合成胶原蛋白的原料；大豆异黄酮对女性尤其友好。<br>
+              <b>③ 好脂肪：</b>深海鱼（三文鱼、沙丁鱼）的 Omega-3、坚果种子的维生素 E，抗炎又护皮肤。<br>
+              <b>④ 全谷物与杂豆：</b>燕麦、糙米、红豆绿豆，稳血糖、少糖化。<br>
+              同时记住「三少」：少糖（控糖化）、少油炸烧烤（减 AGEs）、严格防晒——吃对 + 防晒，比任何补剂都实在。<br>
+              <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>若明显松弛、色斑或怀疑激素相关早衰，先到皮肤科 / 妇科评估，别只靠食疗。</span></div>
             </div></div></div>
           </div>
         </div>
@@ -373,7 +386,7 @@
           </div>
         </div>
 
-        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《从25岁到50岁，女人怎么抗衰老？》《女人35岁以后如何保养更年轻》《抗衰老的食物有哪些》《吃进去的胶原蛋白真的能美容吗？》《女人脸上长斑是什么原因》；ima知识库·营养百科（《中国营养科学全书》《中国居民膳食指南2022》）。</div>
+        <div class="module-sources"><b>模块参考资料：</b>《中国居民膳食指南（2022）》《中国营养科学全书》。</div>
       </div></div></div></section>
 
     <!-- 模块2 稳度更年 -->
@@ -399,7 +412,6 @@
               <br><b>6. 情绪管理：</b>压力会触发潮热，练习深呼吸、正念、冥想，做喜欢的事转移注意力。
               <br><b>7. 睡眠调整：</b>卧室保持 18–22℃，床边放薄毯和透气睡衣，睡前少辛辣少酒。
               <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>潮热每天发作多次、严重影响工作或睡眠，或伴异常出血、情绪/睡眠崩溃，请到妇科/更年期门诊评估，是否需要激素或非激素治疗。</span></div>
-              <div class="src"><span>腾讯医典</span>来源：《更年期潮热出汗难受怎么办》《更年期潮热出汗怎么办》《更年期出汗多怎么办》</div>
             </div></div></div>
           </div>
         </div>
@@ -411,7 +423,6 @@
             <div class="a"><div class="ainner"><div class="a-body">
               轻度潮热靠「行为干预」就能缓解：调低室温/开风扇、穿衣分层方便穿脱、避开热饮热茶、脖子处放冷毛巾；<b>规律运动</b>也能降低发作频率。若这些方法都不管用、已影响日常，可在医生评估后考虑激素或非激素药物。
               <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>潮热严重、伴异常阴道出血、情绪或睡眠明显崩溃，请到妇科/更年期门诊就诊，不要自行买药。</span></div>
-              <div class="src"><span>腾讯医典</span>来源：《潮热症状让更年期的你心烦？几招教你缓解》</div>
             </div></div></div>
           </div>
         </div>
@@ -422,7 +433,6 @@
             <button class="q"><span class="qmark">Q</span><span class="qtext">更年期饮食上怎么吃更舒服、更养骨？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
             <div class="a"><div class="ainner"><div class="a-body">
               重点三件事：① <b>补钙+维 D</b>——奶类、豆制品、小鱼小虾、深绿色蔬菜，多晒太阳；② <b>足量优质蛋白</b>——瘦肉、鱼虾、蛋、豆制品，减缓肌肉流失；③ 多吃蔬果、全谷物，少油腻辛辣、高糖。偏胖者可适度减重，反而能缓解不适。
-              <div class="src"><span>腾讯医典</span>来源：《更年期出汗多怎么办》《更年期潮热出汗，可以吃什么调理》</div>
             </div></div></div>
           </div>
         </div>
@@ -482,7 +492,7 @@
           </div>
         </div>
 
-        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《更年期潮热出汗难受怎么办》《更年期潮热出汗怎么办》《更年期出汗多怎么办》《更年期潮热出汗，可以吃什么调理》。</div>
+        <div class="module-sources"><b>模块参考资料：</b>《中国绝经管理与绝经激素治疗指南2023版》。</div>
       </div></div></div></section>
 
     <!-- 模块3 调理睡眠 -->
@@ -508,7 +518,6 @@
               <br><b>6. 运动安排：</b>白天适度运动、多晒太阳，有助夜间入睡；但睡前 2–3 小时避免剧烈运动。
               <br><b>7. 20 分钟原则：</b>躺下 20 分钟仍清醒，起身到昏暗环境做单调的事，有困意再回床，别把床和「清醒」联系起来。
               <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>失眠若持续数周、明显影响白天状态、情绪或精力，别硬扛，建议到睡眠门诊或精神心理科评估。</span></div>
-              <div class="src"><span>腾讯医典</span>来源：《改善睡眠的小技巧》《睡眠质量差怎么办》</div>
             </div></div></div>
           </div>
         </div>
@@ -520,7 +529,6 @@
             <div class="a"><div class="ainner"><div class="a-body">
               三种常用且安全的方法：① <b>正念冥想</b>——专注呼吸、放下杂念，缓解焦虑；② <b>呼吸训练</b>——缓慢深长的腹式呼吸，降低心率；③ <b>渐进式肌肉放松</b>——从脚趾到头顶依次紧绷再放松。睡前也可泡脚、做眼周按摩、听舒缓音乐。
               <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>尝试大部分方法仍难入睡或睡眠质量差，可到「睡眠门诊」或精神心理科，医生会给出专业方案。</span></div>
-              <div class="src"><span>腾讯医典</span>来源：《改善睡眠的小技巧》</div>
             </div></div></div>
           </div>
         </div>
@@ -532,7 +540,6 @@
             <button class="q"><span class="qmark">Q</span><span class="qtext">躺下很久都睡不着（入睡难/入睡困难），该怎么办？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
             <div class="a"><div class="ainner"><div class="a-body"><b>入睡难</b>（入睡困难）常见于睡前大脑停不下来、屏幕蓝光抑制褪黑素、咖啡因残留或卧室环境不适。可试试：① <b>固定作息</b>——每天同一时间上床和起床，周末也别差太多；② <b>睡前 1 小时远离电子屏幕</b>，调暗灯光，让大脑进入「夜间模式」；③ <b>午后少咖啡因</b>——下午 2 点后尽量不喝浓茶、咖啡、奶茶；④ <b>优化卧室环境</b>——凉爽、黑暗、安静更易入睡；⑤ <b>20 分钟原则</b>——躺下 20 分钟仍清醒，起身到昏暗环境做单调的事，有困意再回床。
               <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>如果入睡难每周 ≥3 天、持续 ≥3 个月，或白天明显疲惫、注意力下降，建议到睡眠门诊或精神心理科评估。</span></div>
-              <div class="src"><span>腾讯医典</span>来源：《改善睡眠的小技巧》《睡眠质量差怎么办》</div>
             </div></div></div>
           </div>
 
@@ -597,7 +604,7 @@
           </div>
         </div>
 
-        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《失眠是女性美丽的天敌，三个特殊时期易得睡眠障碍》《改善睡眠的小技巧》《睡眠质量差怎么办》《女人失眠多梦怎么办，如何不失眠》。</div>
+        <div class="module-sources"><b>模块参考资料：</b>《中国失眠障碍诊断和治疗指南（2017）》。</div>
       </div></div></div></section>
 
     <!-- 模块4 润颜焕活 -->
@@ -615,7 +622,6 @@
             <button class="q"><span class="qmark">Q</span><span class="qtext">吃哪些食物能让气色红润、皮肤透亮？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
             <div class="a"><div class="ainner"><div class="a-body">
               好气色靠「吃对 + 代谢好」：多摄入<span style="color:var(--ink)">富含维 C</span>（鲜枣、柑橘、猕猴桃、番茄）帮助胶原与提亮；<span style="color:var(--ink)">维 E 与好脂肪</span>（坚果、橄榄油、牛油果）抗氧化；<span style="color:var(--ink)">含铁食物</span>（瘦肉、动物血、深绿菜）预防苍白；足量饮水。地中海式饮食（蔬果+全谷+鱼+橄榄油）对皮肤状态友好。
-              <div class="src"><span>腾讯医典</span><span>ima知识库·营养百科</span>来源：《抗衰老的食物有哪些》《为什么有人显老，有人显年轻？》</div>
             </div></div></div>
           </div>
         </div>
@@ -672,7 +678,7 @@
           </div>
         </div>
 
-        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《抗衰老的食物有哪些》《吃进去的胶原蛋白真的能美容吗？》《想要老得慢？做好这4件事》《为什么有人显老，有人显年轻？》；ima知识库·营养百科。</div>
+        <div class="module-sources"><b>模块参考资料：</b>《中国居民膳食指南（2022）》。</div>
       </div></div></div></section>
 
     <!-- 模块5 增肌减脂 -->
@@ -691,7 +697,6 @@
             <div class="a"><div class="ainner"><div class="a-body">
               核心是「<b>力量训练为主、有氧为辅</b>」：哑铃、弹力带、壶铃、自重（深蹲、臀桥、俯卧撑）练肌肉；跑步/游泳/跳绳做有氧燃脂。肌肉多了，基础代谢更高，躺着也多消耗。每周 3–4 次、循序渐进，比天天狂练更可持续。
               <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>有关节疼痛、心慌等不适，或患有慢病，请先咨询医生/康复师再训练。</span></div>
-              <div class="src"><span>腾讯医典</span><span>ima知识库·减重知识库</span>来源：《怎么增肥啊》《健身前后怎样饮食才健康》《成人肥胖食养指南2024》</div>
             </div></div></div>
           </div>
         </div>
@@ -763,7 +768,7 @@
           </div>
         </div>
 
-        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《能不能只减脂肪，不减肌肉呢？》《怎么增肥啊》《减肥不容易，可能是你方法不对！》《健身前后怎样饮食才健康》《3个被误解的减重真相》《该怎样缓解肌肉酸痛》《人体新陈代谢慢怎么办》；ima知识库·减重知识库（《成人肥胖食养指南2024》）。</div>
+        <div class="module-sources"><b>模块参考资料：</b>《成人肥胖食养指南（2024年版）》《中国人群身体活动指南（2021）》。</div>
       </div></div></div></section>
 
     <!-- 模块6 情绪管理 -->
@@ -782,7 +787,6 @@
             <div class="a"><div class="ainner"><div class="a-body">
               随身可用的「情绪急救包」：① <b>4-7-8 呼吸</b>——吸气4秒、屏息7秒、慢呼8秒，重复几次；② <b>正念冥想/身体扫描</b>——把注意力拉回当下；③ <b>渐进式肌肉放松</b>；④ 写「情绪日记」把念头外化；⑤ 找信任的人聊一聊。研究证实这些能降低<b>压力大</b>时的焦虑、愤怒与抑郁感。
               <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>若紧张、担心、身体不适感持续且明显影响生活，请到精神心理科/心身医学科评估。</span></div>
-              <div class="src"><span>腾讯医典</span>来源：《改善睡眠的小技巧》《为何女性更易焦虑？》</div>
             </div></div></div>
           </div>
         </div>
@@ -840,7 +844,7 @@
           </div>
         </div>
 
-        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《为何女性更易焦虑？》《女性为何易焦虑？如何走出焦虑？》《改善睡眠的小技巧》《女性抑郁症》《心情一直低落怎么办》。</div>
+        <div class="module-sources"><b>模块参考资料：</b>《中国失眠障碍诊断和治疗指南（2017）》。</div>
       </div></div></div></section>
 
     <!-- 模块7 地中海食材大全 -->
@@ -866,7 +870,6 @@
               <br><b>4. 蛋白质来源多样：</b>鱼类、海鲜、鸡蛋、豆制品优先，禽肉适量，红肉和加工肉类尽量少吃。
               <br><b>5. 少加工、少添加糖盐：</b>多用天然香料调味，少吃甜点、含糖饮料、腌制和高盐食品。
               <br><b>与东方健康膳食模式的相同点：</b>两者都强调「全谷物为主、多吃蔬菜、适量豆制品和鱼虾、少油少盐、食材多样」。中国的粗杂粮、豆腐豆浆、菌菇海藻、清蒸炖煮等做法，和地中海饮食在理念上高度一致。所以不需要完全照搬橄榄油和西餐食材，用身边的东方食材也能吃出地中海式的健康结构。
-              <div class="src"><span>腾讯医典</span>来源：《地中海饮食是什么》《中国居民膳食指南2022》</div>
             </div></div></div>
           </div>
         </div>
@@ -972,7 +975,7 @@
           <div class="lib-item"><span class="lib-name">每日水果建议</span><span class="lib-desc">《中国居民膳食指南》推荐成人每天 200–350 g 新鲜水果，约一个拳头大小；优先选低 GI、高纤维品种，果汁不能替代完整水果。</span></div>
         </div>
 
-        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《抗衰老的食物有哪些》《地中海饮食是什么》；ima知识库·营养百科（《中国居民膳食指南2022》《中国营养科学全书》）；东方膳食模式（全谷物、豆制品、薯类、菌藻）相关科普。</div>
+        <div class="module-sources"><b>模块参考资料：</b>《中国居民膳食指南（2022）》《中国营养科学全书》；东方膳食模式（全谷物、豆制品、薯类、菌藻）。</div>
       </div></div></div></section>
 
     <!-- 模块8 运动库 -->
@@ -1129,7 +1132,7 @@
           </div>
         </div>
 
-        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《女人35岁以后如何保养更年轻》《健身前后怎样饮食才健康》；ima知识库·减重知识库（《成人肥胖食养指南2024》）。</div>
+        <div class="module-sources"><b>模块参考资料：</b>《成人肥胖食养指南（2024年版）》《中国人群身体活动指南（2021）》《中国居民膳食指南（2022）》。</div>
       </div></div></div></section>
 
     <!-- 模块9 生理期小贴士 -->
@@ -1197,7 +1200,7 @@
           </div>
         </div>
 
-        <div class="module-sources"><b>模块参考资料：</b>腾讯医典《女性经期保健》《经前期综合征》《痛经》《为何女性更易焦虑？》；ima知识库·营养百科（经期铁与镁补充、地中海/东方膳食模式）。</div>
+        <div class="module-sources"><b>模块参考资料：</b>《中国居民膳食指南（2022）》；经期铁与镁补充、地中海/东方膳食模式相关建议。</div>
       </div></div></div></section>
 
   </div>
@@ -1206,7 +1209,7 @@
 
   <footer>
     <h3>关于本 Q&amp;A 库</h3>
-    <p>本库面向女性，聚焦「健康生活方式」改善六大模块问题，内容参考 <b>腾讯医典</b> 官方科普与 <b>ima 知识库</b>（营养百科、减重知识库等），以通俗语言整理，便于日常理解与实践。</p>
+    <p>本库面向围绝经期女性，聚焦健康生活方式相关问题，内容参考权威指南与共识，以通俗语言整理，便于日常理解与实践。</p>
     <div class="disclaimer">
       <b>免责声明：</b>本库仅作健康科普与生活方式参考，<b>不构成任何医疗诊断、治疗建议或替代专业诊疗</b>。每个人的身体状况不同，出现不适应及时前往正规医疗机构就诊；涉及用药、激素治疗、医美、长期失眠/情绪问题等，请遵循医生或专业人士指导。文中标注「建议就医」的情形，均请优先咨询专业医生。
       <br><b>数据说明：</b>为优化内容，后台会匿名记录你的提问内容、访问 IP 与设备标识（匿名 UUID，不可反推真人），仅用于运营统计与命中分析，不作他用。
@@ -1577,6 +1580,14 @@
             // data-pri 仅作为同分 tie-breaker，避免跨分类压制问题标题命中
             var pri = parseInt(child.getAttribute('data-pri') || '0', 10);
             if(!isNaN(pri)) score += Math.min(pri, 20);
+            // 负向「尽量少吃 / 避免」类食材条目：当用户在「找好吃的 / 求推荐」时，绝不应置顶
+            if(isLib){
+              var _avoidName = (q||'');
+              var _avoid = /尽量少吃|避免多吃|少吃|忌口|限量|浅尝辄止/.test(_avoidName);
+              var _seek = /吃什么|吃啥|吃.*推荐|推荐.*吃|有哪些.*吃|可以吃|能吃什么|适合.*吃|多吃|优先.*吃|多选|推荐.*食物|吃什么.*好|吃什么.*推荐|想.*吃|吃点什么|吃点/.test(query||'');
+              var _negCause = /长胖|发胖|变胖|增重|致胖|升血脂|升糖/.test(query||'');
+              if(_avoid && _seek && !_negCause){ score -= 1000; }
+            }
             out.push({mod:modName, cat:catName, q:q, aHTML:aHTML, isLib:isLib, score:score});
           }
         });
@@ -1649,6 +1660,10 @@
       var descEl = tmp.querySelector('.lib-desc');
       if(descEl) aBody = descEl.innerHTML;
     }
+    // 注入权威参考标注（搜索/追问动态渲染的结果也需带上，避免遗漏）
+    var citeKey = srcKeyByTag(r.cat || '', r.q || '');
+    var citeText = SRC_TEXT[citeKey] || SRC_TEXT['通用'];
+    if(citeText){ aBody += '<div class="src">' + citeText + '</div>'; }
     var aLine = '<div class="ans-a">' + aBody + '</div>';
     addAdvisorMsg(meta + qLine + aLine);
     // 根据已展示模块，优先推荐跨模块提问，并随机显示 3~4 条
@@ -1851,19 +1866,21 @@
   // ====== 答案来源标注：按分类注入权威文献（平台来源 + 真实指南/共识）======
   // 说明：以下指南/共识均为真实存在的国家级权威文献，引用其名称作为科普溯源，不杜撰具体条款。
   var SRC_TEXT = {
-    '运动': '<span>腾讯医典</span><span>ima知识库·营养百科</span><span class="auth">权威参考：《中国人群身体活动指南（2021）》</span>',
-    '营养': '<span>腾讯医典</span><span>ima知识库·营养百科</span><span class="auth">权威参考：《中国居民膳食指南（2022）》</span>',
-    '更年期': '<span>腾讯医典</span><span>ima知识库·营养百科</span><span class="auth">权威参考：《中国绝经管理与绝经激素治疗指南2023版》</span>',
-    '睡眠': '<span>腾讯医典</span><span>ima知识库·营养百科</span><span class="auth">权威参考：《中国失眠障碍诊断和治疗指南（2017）》</span>',
-    '情绪': '<span>腾讯医典</span><span>ima知识库·营养百科</span><span class="auth">权威参考：《中国失眠障碍诊断和治疗指南（2017）》</span>',
-    '通用': '<span>腾讯医典</span><span>ima知识库·营养百科</span>'
+    '运动': '<span class="auth">参考：《中国人群身体活动指南（2021）》</span>',
+    '营养': '<span class="auth">参考：《中国居民膳食指南（2022）》《中国营养科学全书（第2版）》</span>',
+    '更年期': '<span class="auth">参考：《中国绝经管理与绝经激素治疗指南2023版》《中国营养科学全书（第2版）》</span>',
+    '睡眠': '<span class="auth">参考：《中国失眠障碍诊断和治疗指南（2017）》</span>',
+    '情绪': '<span class="auth">参考：《中国失眠障碍诊断和治疗指南（2017）》</span>',
+    '减重': '<span class="auth">参考：《成人肥胖食养指南（2024年版）》</span>',
+    '通用': ''
   };
-  function srcKeyByTag(tag){
-    if(/运动|抗阻|有氧|身心/.test(tag)) return '运动';
-    if(/地中海|主食|蛋白质|蔬菜|水果|饮食/.test(tag)) return '营养';
-    if(/潮热|更年期/.test(tag)) return '更年期';
-    if(/失眠|睡眠/.test(tag)) return '睡眠';
-    if(/情绪/.test(tag)) return '情绪';
+  function srcKeyByTag(tag, qtext){
+    if(/运动|抗阻|有氧|身心|力量训练|练力量|金刚芭比|减肥难/.test(tag+' '+(qtext||''))) return '运动';
+    if(/地中海|主食|蛋白质|蔬菜|水果|饮食|食材|全谷物|薯类|推荐|皮肤垮|防晒|抗老|暗沉|长斑|胶原蛋白|糖化|皮肤/.test(tag+' '+(qtext||''))) return '营养';
+    if(/潮热|更年期|盗汗|烘热|绝经|围绝经期|判断.*更年/.test(tag+' '+(qtext||''))) return '更年期';
+    if(/失眠|睡眠|夜间|入睡难|睡不着/.test(tag+' '+(qtext||''))) return '睡眠';
+    if(/情绪|放松|焦虑|压力|日记|反刍|情绪起伏|经前期/.test(tag+' '+(qtext||''))) return '情绪';
+    if(/减重|肥胖|增肥|体重|减肥/.test(tag+' '+(qtext||''))) return '减重';
     return '通用';
   }
   function injectSources(){
@@ -1876,7 +1893,10 @@
       if(has) return;
       var cat = el.closest ? el.closest('.cat') : null;
       var tag = cat && cat.querySelector('.tag') ? cat.querySelector('.tag').textContent : '';
-      var key = srcKeyByTag(tag || '');
+      // 回退：取同块内的问题文本辅助匹配
+      var qtext = '';
+      if(cat){ var qb = cat.querySelector('.qtext'); if(qb) qtext = qb.textContent; }
+      var key = srcKeyByTag(tag || '', qtext);
       var div = document.createElement('div');
       div.className = 'src';
       div.innerHTML = SRC_TEXT[key] || SRC_TEXT['通用'];
