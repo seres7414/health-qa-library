@@ -207,6 +207,9 @@
   .ans-meta{font-size:11.5px; color:#9c8f86; margin-bottom:4px; letter-spacing:.02em;}
   .ans-q{font-weight:600; color:var(--ink); margin-bottom:5px;}
   .ans-a{font-weight:300;}
+  .ai-btn{margin-top:10px; display:inline-block; font-size:12px; color:#7a6a58; background:rgba(255,255,255,.5); border:1px solid #e3d8c8; border-radius:999px; padding:5px 14px; cursor:pointer; transition:.2s; font-family:inherit;}
+  .ai-btn:hover{background:rgba(255,255,255,.85);}
+  .ai-btn:disabled{opacity:.55; cursor:default;}
 
   .chips{display:flex; gap:8px; flex-wrap:wrap; padding:10px 16px 0; border-top:1px solid var(--line); background:var(--glass); flex-shrink:0; max-height:74px; overflow-y:auto; position:relative;}
   .chip{font-family:inherit; font-size:12.5px; padding:6px 13px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.5); color:var(--ink-soft); cursor:pointer; transition:.2s;}
@@ -1449,6 +1452,7 @@
     row.innerHTML = '<div class="avatar">A</div><div class="bubble advisor-bubble">' + innerHtml + '</div>';
     chatMsg.appendChild(row);
     scrollChat();
+    return row;
   }
 
   // 生成「猜你想问」：从各模块取代表问题，跨模块多样、避免扎堆（每模块最多 2 条）
@@ -1700,15 +1704,68 @@
     var citeText = SRC_TEXT[citeKey] || SRC_TEXT['通用'];
     if(citeText){ aBody += '<div class="src">' + citeText + '</div>'; }
     var aLine = '<div class="ans-a">' + aBody + '</div>';
-    addAdvisorMsg(meta + qLine + aLine);
+    var ansRow = addAdvisorMsg(meta + qLine + aLine);
+    if(ansRow){ attachAiBtn(ansRow, r, lastUserQuery, citeText); }
     // 根据已展示模块，优先推荐跨模块提问，并随机显示 3~4 条
     var others = buildGuessList().filter(function(it){ return shownMods.indexOf(it.mod) === -1; });
     var pool = others.length ? others : buildGuessList();
     refreshChips(pickRandom(pool, randCount()));
   }
 
+  // —— 免费 Agent 接入：每条策展答案卡追加「✨ 智能讲解」按钮（opt-in）——
+  // 点击后把 {query, entry{ q,a,source }} 发到后端 /api/ask，由 Workers AI 基于站内科普做接地润色；
+  // AI 不可用时后端自动回退策展原文，前端也做二次兜底提示。
+  function attachAiBtn(row, r, query, source){
+    try{
+      var bubble = row.querySelector('.advisor-bubble');
+      if(!bubble) return;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ai-btn';
+      btn.textContent = '✨ 智能讲解';
+      btn.addEventListener('click', function(){ askAi(btn, r, query, source); });
+      bubble.appendChild(btn);
+    }catch(e){}
+  }
+  function askAi(btn, r, query, source){
+    var orig = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'AI 讲解中…';
+    // 策展答案 HTML → 纯文本，作为 AI 的唯一资料来源
+    var tmp = document.createElement('div');
+    tmp.innerHTML = r.aHTML || '';
+    var aText = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 1200);
+    var qText = (r.q || '').trim();
+    var payload = JSON.stringify({
+      query: (query || '').slice(0, 200),
+      entry: { q: qText, a: aText, source: (source || '').slice(0, 200) }
+    });
+    fetch(BACKEND_URL + '/api/ask', {
+      method: 'POST', mode: 'cors', credentials: 'omit',
+      headers: { 'Content-Type': 'application/json' }, body: payload
+    }).then(function(resp){ return resp.json(); }).then(function(data){
+      if(data && data.ok){
+        if(data.grounded){
+          addAdvisorMsg(
+            '<div class="ans-meta">✨ 智能讲解 · 基于站内科普</div>' +
+            '<div class="ans-a">' + escapeHtml(data.answer).replace(/\n/g, '<br>') + '</div>' +
+            '<div class="src"><span class="auth">来源</span>' + escapeHtml(data.source || '站内科普') + ' · AI 生成，仅供参考，不替代医嘱</div>'
+          );
+        } else {
+          addAdvisorMsg('<div class="ans-meta">智能讲解暂不可用</div><div class="ans-a">刚才那张卡片已是站内科普原文，可直接参考～如有不适请线下就医。</div>');
+        }
+      } else {
+        btn.disabled = false; btn.textContent = orig;
+      }
+    }).catch(function(){
+      addAdvisorMsg('<div class="ans-meta">智能讲解暂不可用</div><div class="ans-a">网络开小差了，站内科普原文已经很靠谱，可直接参考～</div>');
+      btn.disabled = false; btn.textContent = orig;
+    });
+  }
+
   // 记录上一轮查询与答案，用于指代消解（这个/它/上次）与意图继承
   var lastQuery = '';
+  var lastUserQuery = '';
   var lastResultQ = '';
   // 本话题已展示过的答案与答案所属模块：追问时排除已展示内容（轮转出新的相关答案）、同模块加权
   var askedHist = [];
@@ -1731,6 +1788,7 @@
 
   function sendQuestion(){
     var text = chatInput.value.trim();
+    lastUserQuery = text;
     if(!text) return;
     addUserMsg(text);
     chatInput.value = '';
