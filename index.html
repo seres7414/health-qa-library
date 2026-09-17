@@ -1752,9 +1752,12 @@
     // 领域意图追问：去掉泛化词后只剩一个宽泛领域词（如「哪些饮食有帮助」→「饮食」），
     // 说明用户在上一轮话题下就某一方面继续追问，同样继承上一轮查询词合并检索
     var residual2 = text.replace(/[？?。，,\s！!：:、（）()【】\[\]\-\|]+/g, '');
-    residual2 = residual2.replace(/哪些|什么|有没有|帮助|有用|有效|推荐|建议|好吗|适合|比较|有|怎么|怎样|如何|还能|吃|喝|办/g, '');
+    residual2 = residual2.replace(/哪些|什么|有没有|帮助|有用|有效|推荐|建议|好吗|适合|比较|有|怎么|怎样|如何|还能|吃|喝|办|还|再|又|都|分别/g, '');
     var DOMAIN_WORDS = ['饮食','营养','食物','运动','睡眠','锻炼','食材'];
     var domainIntent = !pureIntent && isFollowUp && DOMAIN_WORDS.indexOf(residual2) !== -1;
+    // 无上文的领域概括首问（如「饮食还有什么推荐」）：清洗后只剩单一领域词时，直接按领域词检索，
+    // 避免「主食/蛋白质还有什么推荐」类概览条目靠「还有什么推荐」字符重叠误命中
+    var domainSolo = !pureIntent && !lastQuery && DOMAIN_WORDS.indexOf(residual2) !== -1;
 
     var inheritCtx = lastQuery && (pureIntent || domainIntent || (isFollowUp && tempTerms.length <= 1));
     if(inheritCtx){
@@ -1762,6 +1765,7 @@
       // 否则所有标题带「怎么缓解」的条目都会蹭词抢排名；领域追问合并主题+领域词；其余通用追问主题+原文合并
       effectiveQuery = pureIntent ? lastQuery : (domainIntent ? (lastQuery + ' ' + residual2) : (lastQuery + ' ' + text));
     }
+    if(domainSolo){ effectiveQuery = residual2; }
 
     // 新话题（不含任何承接词）开启时，重置本话题已展示答案的历史
     if(!isFollowUp){ askedHist = []; }
@@ -1896,7 +1900,7 @@
     setTimeout(function(){
       // 追问时传入上一轮答案所属模块：同模块条目获得上下文加权，优先续讲同一话题
       var ctxMod = inheritCtx ? lastResultMod : '';
-      var results = findAnswers(effectiveQuery, contextExcludes, ctxMod, domainIntent ? residual2 : '');
+      var results = findAnswers(effectiveQuery, contextExcludes, ctxMod, (domainIntent || domainSolo) ? residual2 : '');
       if(!pureIntent && contextExcludes.length && (!results.length || results[0].score < 40)){
         var retry = findAnswers(effectiveQuery, [], '', '');
         if(retry.length) results = retry;
@@ -1907,7 +1911,7 @@
         if(askedHist.indexOf(results[0].q) === -1) askedHist.push(results[0].q);
       }
       // 纯意图追问：lastQuery 保持上一轮主题不变，便于继续追问；其余场景沿用原规则
-      lastQuery = pureIntent ? lastQuery : (inheritCtx ? effectiveQuery : text);
+      lastQuery = pureIntent ? lastQuery : ((inheritCtx || domainSolo) ? effectiveQuery : text);
       renderAnswers(results); reportQuery(text, results);
     }, 200);
   }
