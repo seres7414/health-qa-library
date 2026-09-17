@@ -472,6 +472,13 @@
           </div>
 
           <div class="qa">
+            <button class="q"><span class="qmark">Q</span><span class="qtext">关节痛、骨头疼，怎么缓解？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <div class="a"><div class="ainner"><div class="a-body">日常可以从四方面入手：① <b>吃够钙和维 D</b>——每天一杯奶（乳糖不耐可换酸奶/低乳糖奶），豆制品、深绿菜、小鱼小虾常上桌，多晒太阳；② <b>规律负重+抗阻运动</b>——快走、哑铃、弹力带每周 2–3 次，肌肉强了关节负担反而小，运动前热身、关节疼痛处避开；③ <b>控体重、防跌倒</b>——偏胖者适度减重能给膝髋关节减负，居家去除地面障碍、浴室防滑；④ <b>局部热敷</b>——酸胀部位热敷 15–20 分钟放松。若疼痛持续加重、红肿发热或影响走路，别硬扛。
+              <div class="see-doctor"><span>⚠️</span><span><b>建议就医：</b>关节持续疼痛、红肿发热或影响活动，请到骨科/风湿免疫科检查，排查关节本身的问题。</span></div>
+            </div></div></div>
+          </div>
+
+          <div class="qa">
             <button class="q"><span class="qmark">Q</span><span class="qtext">为什么更年期要特别注意补钙？</span><svg class="qc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
             <div class="a"><div class="ainner"><div class="a-body">雌激素下降会加速骨量流失，更年期是女性骨质疏松的高发窗口。补钙+维 D+负重运动（走路、哑铃）能有效减缓。日常奶类、豆制品、深绿菜都是好来源。</div></div></div>
           </div>
@@ -1503,10 +1510,18 @@
   }
 
   // 从 Q&A 库中按关键词检索（复用同义词表与匹配函数）
-  function findAnswers(query, contextExcludeTerms){
+  function findAnswers(query, contextExcludeTerms, ctxMod, domainBoost){
     contextExcludeTerms = contextExcludeTerms || [];
     var terms = expandTerms(query);
     if(!terms.length) return [];
+    // 通用食物词：仅在「标题主题词加权」时排除，避免「吃/食物/饮食」这类泛词把单品食材顶到对题问答前面
+    var FOOD_GENERIC = new Set(['食材','食物','饮食','营养','吃啥','吃什么','吃','喝','食谱','菜谱','饮食搭配','能吃','可以吃','吃啥好','想吃']);
+    // 泛词/具体词拆分：仅靠「吃/食物/饮食」等泛词命中不算真正对题（食材库每条描述都会提到吃）
+    var specTerms = [];
+    for(var si=0; si<terms.length; si++){
+      var st = terms[si];
+      if(st.length >= 2 && !FOOD_GENERIC.has(st) && specTerms.indexOf(st) === -1) specTerms.push(st);
+    }
     // 清洗后的原始查询，用于判断「问题是否与查询几乎一致」
     var rawClean = (query || '').replace(/[？?。，,\s！!：:]+/g, '').toLowerCase();
     // 解析「除了 XX 还/另外/其他/还有什么」类追问中的排除词，用于跳过已提到的条目
@@ -1551,6 +1566,10 @@
           var cHit = matches(catName, terms);
           var mHit = matches(modName, terms);
           if(qHit || aHit || cHit || mHit){
+            // 具体词命中判定：分类/模块名只有被具体词（非泛食物词）命中才计分
+            var qHitSpec = specTerms.length > 0 && (matches(q, specTerms) || (isLib && matches(libDescText, specTerms)));
+            var mHitSpec = specTerms.length > 0 && matches(modName, specTerms);
+            var cHitSpec = specTerms.length > 0 && matches(catName, specTerms);
             // 识别「问题/食材名与查询几乎一致」：仅看条目名称本身，避免描述里含有关键词就误触置顶
             var qClean = (q || '').replace(/[？?。，,\s！!：:]+/g, '').toLowerCase();
             // 完全/高度命中：互相包含 或 字符重叠度高（≥4 字才启用重叠度，避免 2 字查询被无关条目拼凑命中）
@@ -1570,8 +1589,9 @@
             }
             // 加权：问题完全命中 > 食材名精确命中 > 问题命中 > 模块命中 > 分类命中 > 答案命中
             // exactQ / exactName / qHit 三者互斥，避免 mere 关键词命中叠加过高
-            var score = exactQ ? 200 : (exactName ? 150 : (qHit ? 40 : 0));
-            score += (mHit ? 25 : 0) + (cHit ? 15 : 0) + (aHit ? 8 : 0);
+            // 泛词降权：食材库条目仅靠泛词命中描述时基础分降为 15；问答标题命中（含泛词）仍算对题 40
+            var score = exactQ ? 200 : (exactName ? 150 : (qHit ? ((qHitSpec || !isLib) ? 40 : 15) : 0));
+            score += (mHitSpec ? 25 : 0) + (cHitSpec ? 15 : 0) + (aHit ? 8 : 0);
             // 命中的关键词越多，相关性越高（加分项），但上限封顶避免噪音
             var hay = (q + ' ' + modName + ' ' + catName + ' ' + aHTML).toLowerCase();
             var matchedCount = 0;
@@ -1584,10 +1604,24 @@
             if(isLib){
               var _avoidName = (q||'');
               var _avoid = /尽量少吃|避免多吃|少吃|忌口|限量|浅尝辄止/.test(_avoidName);
-              var _seek = /吃什么|吃啥|吃.*推荐|推荐.*吃|有哪些.*吃|可以吃|能吃什么|适合.*吃|多吃|优先.*吃|多选|推荐.*食物|吃什么.*好|吃什么.*推荐|想.*吃|吃点什么|吃点/.test(query||'');
+              var _seek = /吃什么|吃啥|饮食|营养|食物|食谱|吃.*推荐|推荐.*吃|有哪些.*吃|可以吃|能吃什么|适合.*吃|多吃|优先.*吃|多选|推荐.*食物|吃什么.*好|吃什么.*推荐|想.*吃|吃点什么|吃点/.test(query||'');
               var _negCause = /长胖|发胖|变胖|增重|致胖|升血脂|升糖/.test(query||'');
               if(_avoid && _seek && !_negCause){ score -= 1000; }
             }
+            // 标题主题词加权：问题/食材名直接命中查询扩展出的「主题词」时再加分，
+            // 让对题问答压过「蹭词」的单品食材（如搜「气色」时让「吃哪些食物能让气色红润」压过「番茄」）。
+            // 排除泛食物词，避免它们给任何食材条目无差别加分。
+            var titleText = (q || '').toLowerCase();
+            var tb = 0;
+            for(var tj=1; tj<terms.length; tj++){
+              var tw = terms[tj];
+              if(tw.length >= 2 && !FOOD_GENERIC.has(tw) && titleText.indexOf(tw) !== -1){ tb += 12; if(tb >= 24) break; }
+            }
+            score += tb;
+            // 追问上下文模块加权：追问是同一话题的延续，上一轮答案所属模块里的条目优先
+            if(ctxMod && modName === ctxMod){ score += 20; }
+            // 领域追问加权：标题明确含当前领域词（如「饮食」）的问答，是「就这一方面」的对题内容
+            if(domainBoost && titleText.indexOf(domainBoost) !== -1){ score += 20; }
             out.push({mod:modName, cat:catName, q:q, aHTML:aHTML, isLib:isLib, score:score});
           }
         });
@@ -1652,7 +1686,8 @@
     var qLine = r.isLib
       ? '<div class="ans-q">食材：' + escapeHtml(r.q) + '</div>'
       : '<div class="ans-q">问：' + escapeHtml(r.q) + '</div>';
-    var aBody = r.aHTML;
+    // 静态注入过的「参考：…」先剥掉，避免与下方动态注入叠加成两条相同文献
+    var aBody = (r.aHTML || '').replace(/<div class="src">[\s\S]*?<\/div>/g, '');
     // 食材库答案：标题已在 qLine 中展示，正文只取 .lib-desc 避免重复显示分类名
     if(r.isLib){
       var tmp = document.createElement('div');
@@ -1675,6 +1710,9 @@
   // 记录上一轮查询与答案，用于指代消解（这个/它/上次）与意图继承
   var lastQuery = '';
   var lastResultQ = '';
+  // 本话题已展示过的答案与答案所属模块：追问时排除已展示内容（轮转出新的相关答案）、同模块加权
+  var askedHist = [];
+  var lastResultMod = '';
 
   // 兜底/宽泛查询：没有实质主题词（食材/运动/症状等）时，不应被具体条目标题吞掉
   function isGenericOnly(query){
@@ -1701,12 +1739,32 @@
     var effectiveQuery = text;
     var contextExcludes = [];
 
+    // 纯意图追问：去掉疑问/意图词后没有剩余主题词（如「怎么缓解」「如何改善」「怎么办」「有什么办法」），
+    // 说明用户在承接上一轮话题继续提问，应继承上一轮查询词一起去检索，而不是当作宽泛兜底
+    var residual = text.replace(/[？?。，,\s！!：:、（）()【】\[\]\-\|]+/g, '');
+    residual = residual.replace(/怎么|怎样|如何|缓解|改善|调理|处理|解决|治疗|应对|预防|办法|方法|注意|推荐|建议|有没有|还能|可以|什么|哪些|好吗|行不行|能不能|办|呢|吗|吧|啊|呀|的|了/g, '');
+    var pureIntent = !!lastQuery && residual.length <= 1;
+
     // 意图继承：追问句只有通用词（如「除了这个还有其他的推荐吗」）时，合并上一轮查询词
     var tempTerms = expandTerms(text);
-    var isFollowUp = /这个|它|其他|另外|推荐|有没有|哪些|什么|再|又|还有/.test(text);
-    if(lastQuery && isFollowUp && tempTerms.length <= 1){
-      effectiveQuery = lastQuery + ' ' + text;
+    var isFollowUp = /这个|它|其他|另外|推荐|有没有|哪些|什么|再|又|还有|还能|怎样|如何/.test(text) || pureIntent;
+
+    // 领域意图追问：去掉泛化词后只剩一个宽泛领域词（如「哪些饮食有帮助」→「饮食」），
+    // 说明用户在上一轮话题下就某一方面继续追问，同样继承上一轮查询词合并检索
+    var residual2 = text.replace(/[？?。，,\s！!：:、（）()【】\[\]\-\|]+/g, '');
+    residual2 = residual2.replace(/哪些|什么|有没有|帮助|有用|有效|推荐|建议|好吗|适合|比较|有|怎么|怎样|如何|还能|吃|喝|办/g, '');
+    var DOMAIN_WORDS = ['饮食','营养','食物','运动','睡眠','锻炼','食材'];
+    var domainIntent = !pureIntent && isFollowUp && DOMAIN_WORDS.indexOf(residual2) !== -1;
+
+    var inheritCtx = lastQuery && (pureIntent || domainIntent || (isFollowUp && tempTerms.length <= 1));
+    if(inheritCtx){
+      // 纯意图追问（「怎么缓解」等）：检索只用上一轮主题词——意图词本身不参与检索，
+      // 否则所有标题带「怎么缓解」的条目都会蹭词抢排名；领域追问合并主题+领域词；其余通用追问主题+原文合并
+      effectiveQuery = pureIntent ? lastQuery : (domainIntent ? (lastQuery + ' ' + residual2) : (lastQuery + ' ' + text));
     }
+
+    // 新话题（不含任何承接词）开启时，重置本话题已展示答案的历史
+    if(!isFollowUp){ askedHist = []; }
 
     // 蛋白质类追问：上一轮主题为蛋白质，本轮问「有什么/还有哪些/其他/另外/再 推荐」时，直接返回蛋白质推荐总览
     var isProteinTopicPrev = lastQuery && /蛋白质/.test(lastQuery);
@@ -1721,6 +1779,8 @@
         var proResult = {mod:'地中海食材大全', cat:proCat, q:proQ, aHTML:proA, isLib:false, score:999};
         setTimeout(function(){
           lastResultQ = proQ;
+          lastResultMod = '地中海食材大全';
+          if(askedHist.indexOf(proQ) === -1) askedHist.push(proQ);
           lastQuery = text;
           renderAnswers([proResult]); reportQuery(text, [proResult]);
         }, 200);
@@ -1741,6 +1801,8 @@
         var sportsResult = {mod:'抗老营养与生活方式', cat:sportsCat, q:sportsQ, aHTML:sportsA, isLib:false, score:999};
         setTimeout(function(){
           lastResultQ = sportsQ;
+          lastResultMod = '抗老营养与生活方式';
+          if(askedHist.indexOf(sportsQ) === -1) askedHist.push(sportsQ);
           lastQuery = text;
           renderAnswers([sportsResult]); reportQuery(text, [sportsResult]);
         }, 200);
@@ -1758,9 +1820,9 @@
       return;
     }
 
-    // 追问去重：只要判断为承接上文，就默认排除上一轮返回答案，避免重复推荐同一食材/答案
-    if(lastResultQ && isFollowUp){
-      contextExcludes.push(lastResultQ);
+    // 追问去重：承接上文时排除本话题已展示过的全部答案，让追问轮转出尚未看过的相关内容
+    if(isFollowUp && askedHist.length){
+      contextExcludes = contextExcludes.concat(askedHist);
     }
     // 指代消解兜底：用户说「这个/它/上次/刚才/之前/上面」时，也排除上一轮答案
     if(lastResultQ && /这个|它|上次|刚才|之前|上面/.test(text)){
@@ -1777,7 +1839,9 @@
         var stapleResult = {mod:'地中海食材大全', cat:'主食 · 更多推荐', q:stapleQ, aHTML:stapleA, isLib:false, score:999};
         setTimeout(function(){
           lastResultQ = stapleQ;
-          lastQuery = (lastQuery && isFollowUp && tempTerms.length <= 1) ? effectiveQuery : text;
+          lastResultMod = '地中海食材大全';
+          if(askedHist.indexOf(stapleQ) === -1) askedHist.push(stapleQ);
+          lastQuery = pureIntent ? lastQuery : (inheritCtx ? effectiveQuery : text);
           renderAnswers([stapleResult]); reportQuery(text, [stapleResult]);
         }, 200);
         return;
@@ -1794,7 +1858,9 @@
         var vegResult = {mod:'地中海食材大全', cat:'蔬菜 · 更多推荐', q:vegQ, aHTML:vegA, isLib:false, score:999};
         setTimeout(function(){
           lastResultQ = vegQ;
-          lastQuery = (lastQuery && isFollowUp && tempTerms.length <= 1) ? effectiveQuery : text;
+          lastResultMod = '地中海食材大全';
+          if(askedHist.indexOf(vegQ) === -1) askedHist.push(vegQ);
+          lastQuery = pureIntent ? lastQuery : (inheritCtx ? effectiveQuery : text);
           renderAnswers([vegResult]); reportQuery(text, [vegResult]);
         }, 200);
         return;
@@ -1818,7 +1884,9 @@
         var exResult = {mod:'运动库', cat:exCat, q:exQ, aHTML:exA, isLib:false, score:999};
         setTimeout(function(){
           lastResultQ = exQ;
-          lastQuery = (lastQuery && isFollowUp && tempTerms.length <= 1) ? effectiveQuery : text;
+          lastResultMod = '运动库';
+          if(askedHist.indexOf(exQ) === -1) askedHist.push(exQ);
+          lastQuery = pureIntent ? lastQuery : (inheritCtx ? effectiveQuery : text);
           renderAnswers([exResult]); reportQuery(text, [exResult]);
         }, 200);
         return;
@@ -1826,10 +1894,20 @@
     }
 
     setTimeout(function(){
-      var results = findAnswers(effectiveQuery, contextExcludes);
-      if(results.length) lastResultQ = results[0].q;
-      // 追问场景保留合并后的查询，便于下一轮继续继承主题；否则记录本轮原文
-      lastQuery = (lastQuery && isFollowUp && tempTerms.length <= 1) ? effectiveQuery : text;
+      // 追问时传入上一轮答案所属模块：同模块条目获得上下文加权，优先续讲同一话题
+      var ctxMod = inheritCtx ? lastResultMod : '';
+      var results = findAnswers(effectiveQuery, contextExcludes, ctxMod, domainIntent ? residual2 : '');
+      if(!pureIntent && contextExcludes.length && (!results.length || results[0].score < 40)){
+        var retry = findAnswers(effectiveQuery, [], '', '');
+        if(retry.length) results = retry;
+      }
+      if(results.length){
+        lastResultQ = results[0].q;
+        lastResultMod = results[0].mod;
+        if(askedHist.indexOf(results[0].q) === -1) askedHist.push(results[0].q);
+      }
+      // 纯意图追问：lastQuery 保持上一轮主题不变，便于继续追问；其余场景沿用原规则
+      lastQuery = pureIntent ? lastQuery : (inheritCtx ? effectiveQuery : text);
       renderAnswers(results); reportQuery(text, results);
     }, 200);
   }
@@ -1876,8 +1954,8 @@
   };
   function srcKeyByTag(tag, qtext){
     if(/运动|抗阻|有氧|身心|力量训练|练力量|金刚芭比|减肥难/.test(tag+' '+(qtext||''))) return '运动';
-    if(/地中海|主食|蛋白质|蔬菜|水果|饮食|食材|全谷物|薯类|推荐|皮肤垮|防晒|抗老|暗沉|长斑|胶原蛋白|糖化|皮肤/.test(tag+' '+(qtext||''))) return '营养';
-    if(/潮热|更年期|盗汗|烘热|绝经|围绝经期|判断.*更年/.test(tag+' '+(qtext||''))) return '更年期';
+    if(/地中海|主食|蛋白质|蔬菜|水果|饮食|食材|全谷物|薯类|推荐|皮肤垮|防晒|抗老|抗衰|衰老|抗氧化|暗沉|长斑|胶原蛋白|糖化|皮肤/.test(tag+' '+(qtext||''))) return '营养';
+    if(/潮热|更年期|盗汗|烘热|绝经|围绝经期|判断.*更年|关节痛|关节疼|骨头疼|骨痛|骨质疏松|骨密度|腰酸背痛|补钙/.test(tag+' '+(qtext||''))) return '更年期';
     if(/失眠|睡眠|夜间|入睡难|睡不着/.test(tag+' '+(qtext||''))) return '睡眠';
     if(/情绪|放松|焦虑|压力|日记|反刍|情绪起伏|经前期/.test(tag+' '+(qtext||''))) return '情绪';
     if(/减重|肥胖|增肥|体重|减肥/.test(tag+' '+(qtext||''))) return '减重';
